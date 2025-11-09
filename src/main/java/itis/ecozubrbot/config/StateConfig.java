@@ -1,11 +1,8 @@
 package itis.ecozubrbot.config;
 
-import itis.ecozubrbot.max.commands.Command;
-import itis.ecozubrbot.max.commands.impl.HelpCommand;
-import itis.ecozubrbot.max.containers.CommandContainer;
 import itis.ecozubrbot.max.containers.StateContainer;
-import itis.ecozubrbot.max.states.impl.DefaultState;
 import itis.ecozubrbot.max.states.State;
+import itis.ecozubrbot.max.states.impl.DefaultState;
 import itis.ecozubrbot.max.states.impl.TestState;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -25,5 +22,4 @@ public class StateConfig {
         stateList.add(defaultState);
         return new StateContainer(stateList);
     }
-
 }

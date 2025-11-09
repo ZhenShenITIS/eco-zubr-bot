@@ -7,15 +7,14 @@ import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
-import ru.max.botapi.model.Message;
 import ru.max.botapi.model.MessageCreatedUpdate;
 import ru.max.botapi.model.NewMessageBody;
-import ru.max.botapi.model.User;
 import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 public class UnknownCommand implements Command {
     private CommandName commandName = CommandName.UNKNOWN;
+
     @Override
     public CommandName getCommand() {
         return commandName;
