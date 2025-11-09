@@ -3,10 +3,9 @@ package itis.ecozubrbot.max.containers;
 import com.google.common.collect.ImmutableMap;
 import itis.ecozubrbot.max.commands.Command;
 import itis.ecozubrbot.max.commands.impl.UnknownCommand;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CommandContainer {

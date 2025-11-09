@@ -5,10 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum CommandName {
-    START("/start"),
-    UNKNOWN("/"),
-    HELP("/help");
+public enum CallbackName {
+    TEST("test");
 
-    private final String commandName;
+    private final String callbackName;
 }

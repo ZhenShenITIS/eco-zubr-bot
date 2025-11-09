@@ -15,7 +15,6 @@ public class MessageCreatedHandler {
     public void handleMessageCreated(MessageCreatedUpdate update, MaxClient client) {
         String messageText = update.getMessage().getBody().getText().trim();
         if (messageText.startsWith("/")) {
-            System.out.println(messageText);
             commandContainer.retrieveCommand(messageText).handleCommand(update, client);
         }
     }
