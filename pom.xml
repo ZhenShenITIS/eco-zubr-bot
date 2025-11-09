@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.7</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
     <groupId>itis</groupId>
     <artifactId>eco-zubr-bot</artifactId>
@@ -59,6 +59,11 @@
             <artifactId>max-bot-sdk</artifactId>
             <version>0.0.6-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.3.1-jre</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -85,6 +90,42 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.46.1</version>
+                <configuration>
+                    <java>
+                        <palantirJavaFormat>
+                            <version>2.73.0</version>
+                            <style>PALANTIR</style>
+                            <formatJavadoc>true</formatJavadoc>
+                        </palantirJavaFormat>
+                    </java>
+                    <pom>
+                        <sortPom>
+                            <expandEmptyElements>false</expandEmptyElements>
+                            <spaceBeforeCloseEmptyElement>false</spaceBeforeCloseEmptyElement>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                            <keepBlankLines>true</keepBlankLines>
+                            <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+                            <sortPlugins>none</sortPlugins>
+                            <sortDependencyManagement>none</sortDependencyManagement>
+                            <sortDependencies>none</sortDependencies>
+                            <sortDependencyExclusions>none</sortDependencyExclusions>
+                            <sortProperties>false</sortProperties>
+                            <sortModules>true</sortModules>
+                            <sortExecutions>false</sortExecutions>
+                        </sortPom>
+                    </pom>
+                    <markdown>
+                        <includes>
+                            <include>*.md</include>
+                        </includes>
+                        <flexmark/>
+                    </markdown>
                 </configuration>
             </plugin>
         </plugins>
