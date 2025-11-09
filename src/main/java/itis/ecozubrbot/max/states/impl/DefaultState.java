@@ -1,7 +1,9 @@
-package itis.ecozubrbot.max.states;
+package itis.ecozubrbot.max.states.impl;
 
 import itis.ecozubrbot.constants.StateName;
-import itis.ecozubrbot.repositories.StateRepository;
+import itis.ecozubrbot.max.handlers.MessageCallbackHandler;
+import itis.ecozubrbot.max.handlers.MessageCreatedHandler;
+import itis.ecozubrbot.max.states.State;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.botapi.client.MaxClient;
@@ -13,14 +15,17 @@ import ru.max.botapi.model.MessageCreatedUpdate;
 public class DefaultState implements State {
     private final StateName state = StateName.DEFAULT;
 
-    private StateRepository stateRepository;
+    private MessageCallbackHandler messageCallbackHandler;
+    private MessageCreatedHandler messageCreatedHandler;
 
     @Override
-    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
+    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
+        messageCallbackHandler.handleMessageCallback(update, client);
+    }
 
     @Override
     public void handleMessageCreated(MessageCreatedUpdate update, MaxClient client) {
-        stateRepository.put(update.getMessage().getSender().getUserId(), StateName.TEST);
+        messageCreatedHandler.handleMessageCreated(update, client);
     }
 
     @Override

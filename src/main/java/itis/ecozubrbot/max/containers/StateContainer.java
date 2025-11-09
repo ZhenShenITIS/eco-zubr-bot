@@ -5,6 +5,8 @@ import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.max.states.State;
 import java.util.HashMap;
 import java.util.List;
+
+import itis.ecozubrbot.max.states.impl.DefaultState;
 import org.springframework.stereotype.Component;
 
 @Component

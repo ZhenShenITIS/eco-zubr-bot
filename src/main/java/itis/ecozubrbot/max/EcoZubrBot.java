@@ -1,7 +1,7 @@
 package itis.ecozubrbot.max;
 
 import itis.ecozubrbot.max.containers.StateContainer;
-import itis.ecozubrbot.max.states.TestState;
+import itis.ecozubrbot.max.states.impl.TestState;
 import itis.ecozubrbot.repositories.StateRepository;
 import org.springframework.stereotype.Component;
 import ru.max.bot.annotations.UpdateHandler;

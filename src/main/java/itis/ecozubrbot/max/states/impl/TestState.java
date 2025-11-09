@@ -1,6 +1,7 @@
-package itis.ecozubrbot.max.states;
+package itis.ecozubrbot.max.states.impl;
 
 import itis.ecozubrbot.constants.StateName;
+import itis.ecozubrbot.max.states.State;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.botapi.client.MaxClient;
