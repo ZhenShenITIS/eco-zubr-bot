@@ -11,8 +11,8 @@ import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
-public class TamagotchiStartCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.TAMAGOTCHI;
+public class PetStartCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.PET;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {

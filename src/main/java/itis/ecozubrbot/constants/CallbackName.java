@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum CallbackName {
     TEST("test"),
-    TAMAGOTCHI("tamagotchi"),
+    PET("pet"),
     TASKS("tasks"),
     SHOP("shop"),
     PROFILE("profile"),

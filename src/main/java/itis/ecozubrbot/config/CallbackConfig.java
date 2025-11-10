@@ -4,7 +4,7 @@ import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.max.callbacks.impl.EventsCallback;
 import itis.ecozubrbot.max.callbacks.impl.ProfileCallback;
 import itis.ecozubrbot.max.callbacks.impl.ShopCallback;
-import itis.ecozubrbot.max.callbacks.impl.TamagotchiStartCallback;
+import itis.ecozubrbot.max.callbacks.impl.PetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.TasksCallback;
 import itis.ecozubrbot.max.callbacks.impl.TestCallback;
 import itis.ecozubrbot.max.containers.CallbackContainer;
@@ -20,7 +20,7 @@ public class CallbackConfig {
     private EventsCallback eventsCallback;
     private ProfileCallback profileCallback;
     private ShopCallback shopCallback;
-    private TamagotchiStartCallback tamagotchiStartCallback;
+    private PetStartCallback tamagotchiStartCallback;
     private TasksCallback tasksCallback;
     private List<Callback> callbackList;
 
