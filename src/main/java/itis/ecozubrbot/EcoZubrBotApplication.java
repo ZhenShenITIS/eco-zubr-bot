@@ -19,8 +19,7 @@ public class EcoZubrBotApplication {
     public CommandLineRunner commandLineRunner(EcoZubrBot bot) {
         return args -> {
             bot.start();
-            AdminControl adminControl = new AdminControl(bot);
-            adminControl.start();
+            new AdminControl(bot).start();
         };
     }
 }
