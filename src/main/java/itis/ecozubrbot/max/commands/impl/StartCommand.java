@@ -32,7 +32,7 @@ public class StartCommand implements Command {
         List<List<Button>> buttonGrid = new ArrayList<>();
         List<Button> buttonRow1 = new ArrayList<>();
         buttonRow1.add(new CallbackButton(
-                CallbackName.PET.getCallbackName(), StringConstants.TAMAGOTCHI_BUTTON.getValue()));
+                CallbackName.PET.getCallbackName(), StringConstants.PET_BUTTON.getValue()));
         buttonRow1.add(new CallbackButton(CallbackName.SHOP.getCallbackName(), StringConstants.SHOP_BUTTON.getValue()));
         buttonGrid.add(buttonRow1);
         List<Button> buttonRow2 = new ArrayList<>();
