@@ -4,8 +4,8 @@ import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import itis.ecozubrbot.services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 @AllArgsConstructor
 @Component
 public class UserServiceImpl implements UserService {

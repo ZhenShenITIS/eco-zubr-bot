@@ -1,12 +1,8 @@
 package itis.ecozubrbot.services.impl;
 
-import itis.ecozubrbot.services.GeoLocationService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import itis.ecozubrbot.services.GeoLocationService;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -15,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class YandexGeoLocationService implements GeoLocationService {
@@ -22,9 +20,8 @@ public class YandexGeoLocationService implements GeoLocationService {
     @Value("${YANDEX_GEOCODER_TOKEN}")
     private String YANDEX_GEOCODER_TOKEN;
 
-    private final HttpClient http = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(5))
-            .build();
+    private final HttpClient http =
+            HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5)).build();
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -42,7 +39,6 @@ public class YandexGeoLocationService implements GeoLocationService {
 
             URI uri = new URI("https", "geocode-maps.yandex.ru", "/v1", query, null);
 
-
             HttpRequest req = HttpRequest.newBuilder(uri)
                     .timeout(Duration.ofSeconds(10))
                     .header("Accept", "application/json")
@@ -59,11 +55,20 @@ public class YandexGeoLocationService implements GeoLocationService {
             if (!members.isArray() || members.size() == 0) return "";
 
             JsonNode geoObject = members.get(0).path("GeoObject");
-            JsonNode comps = geoObject.path("metaDataProperty").path("GeocoderMetaData").path("Address").path("Components");
+            JsonNode comps = geoObject
+                    .path("metaDataProperty")
+                    .path("GeocoderMetaData")
+                    .path("Address")
+                    .path("Components");
             String city = findComponentByKinds(comps, "locality", "area", "province", "region");
 
             if ((city == null || city.isBlank())
-                    && "locality".equalsIgnoreCase(geoObject.path("metaDataProperty").path("GeocoderMetaData").path("kind").asText(""))) {
+                    && "locality"
+                            .equalsIgnoreCase(geoObject
+                                    .path("metaDataProperty")
+                                    .path("GeocoderMetaData")
+                                    .path("kind")
+                                    .asText(""))) {
                 city = geoObject.path("name").asText("");
             }
             return city == null ? "" : city;
@@ -72,7 +77,6 @@ public class YandexGeoLocationService implements GeoLocationService {
             return "";
         }
     }
-
 
     private String findComponentByKinds(JsonNode comps, String... kinds) {
         if (comps != null && comps.isArray()) {

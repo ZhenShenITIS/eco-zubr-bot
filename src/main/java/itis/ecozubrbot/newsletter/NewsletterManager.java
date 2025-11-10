@@ -1,11 +1,10 @@
 package itis.ecozubrbot.newsletter;
 
+import java.util.List;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
-
-import java.util.List;
 
 public class NewsletterManager {
     private final MaxClient client;

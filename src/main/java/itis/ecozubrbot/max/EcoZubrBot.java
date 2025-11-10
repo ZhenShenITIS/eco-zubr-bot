@@ -1,6 +1,5 @@
 package itis.ecozubrbot.max;
 
-import itis.ecozubrbot.max.commands.impl.StartCommand;
 import itis.ecozubrbot.max.containers.StateContainer;
 import itis.ecozubrbot.max.handlers.BotStartedHandler;
 import itis.ecozubrbot.max.states.impl.TestState;
@@ -11,9 +10,6 @@ import ru.max.bot.longpolling.LongPollingBot;
 import ru.max.botapi.model.BotStartedUpdate;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.MessageCreatedUpdate;
-import ru.max.botapi.model.Update;
-
-import java.util.List;
 
 @Component
 public class EcoZubrBot extends LongPollingBot {
@@ -24,7 +20,11 @@ public class EcoZubrBot extends LongPollingBot {
     private BotStartedHandler botStartedHandler;
 
     public EcoZubrBot(
-            String accessToken, TestState testState, StateContainer stateContainer, StateRepository stateRepository, BotStartedHandler botStartedHandler) {
+            String accessToken,
+            TestState testState,
+            StateContainer stateContainer,
+            StateRepository stateRepository,
+            BotStartedHandler botStartedHandler) {
         super(accessToken);
         this.testState = testState;
         this.stateContainer = stateContainer;
@@ -49,8 +49,7 @@ public class EcoZubrBot extends LongPollingBot {
     }
 
     @UpdateHandler
-    public void onBotStarted (BotStartedUpdate update) {
+    public void onBotStarted(BotStartedUpdate update) {
         Thread.startVirtualThread(() -> botStartedHandler.onBotStarted(update, getClient()));
     }
-
 }

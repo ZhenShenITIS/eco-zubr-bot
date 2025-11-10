@@ -31,8 +31,7 @@ public class StartCommand implements Command {
     public void handleCommand(MessageCreatedUpdate update, MaxClient client) {
         List<List<Button>> buttonGrid = new ArrayList<>();
         List<Button> buttonRow1 = new ArrayList<>();
-        buttonRow1.add(new CallbackButton(
-                CallbackName.PET.getCallbackName(), StringConstants.PET_BUTTON.getValue()));
+        buttonRow1.add(new CallbackButton(CallbackName.PET.getCallbackName(), StringConstants.PET_BUTTON.getValue()));
         buttonRow1.add(new CallbackButton(CallbackName.SHOP.getCallbackName(), StringConstants.SHOP_BUTTON.getValue()));
         buttonGrid.add(buttonRow1);
         List<Button> buttonRow2 = new ArrayList<>();

@@ -2,7 +2,6 @@ package itis.ecozubrbot.admincontrol;
 
 import itis.ecozubrbot.max.EcoZubrBot;
 import itis.ecozubrbot.newsletter.NewsletterManager;
-
 import java.util.Scanner;
 
 public class AdminControl extends Thread {
@@ -19,7 +18,7 @@ public class AdminControl extends Thread {
         while (true) {
             String input = sc.nextLine();
             switch (input) {
-                // Команды для админки
+                    // Команды для админки
             }
         }
     }

@@ -2,9 +2,9 @@ package itis.ecozubrbot.config;
 
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.max.callbacks.impl.EventsCallback;
+import itis.ecozubrbot.max.callbacks.impl.PetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.ProfileCallback;
 import itis.ecozubrbot.max.callbacks.impl.ShopCallback;
-import itis.ecozubrbot.max.callbacks.impl.PetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.TasksCallback;
 import itis.ecozubrbot.max.callbacks.impl.TestCallback;
 import itis.ecozubrbot.max.containers.CallbackContainer;

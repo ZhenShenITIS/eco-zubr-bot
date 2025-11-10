@@ -6,6 +6,7 @@ import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.services.GeoLocationService;
 import itis.ecozubrbot.services.UserService;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -18,8 +19,6 @@ import ru.max.botapi.model.MessageCreatedUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
 
-import java.util.List;
-
 @Component
 @AllArgsConstructor
 public class GeolocationState implements State {
@@ -30,9 +29,7 @@ public class GeolocationState implements State {
     private StateRepository stateRepository;
 
     @Override
-    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
-
-    }
+    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
 
     @Override
     public void handleMessageCreated(MessageCreatedUpdate update, MaxClient client) {
@@ -46,7 +43,8 @@ public class GeolocationState implements State {
                     double lat = location.getLatitude();
                     double lon = location.getLongitude();
                     String city = geoLocationService.getCity(lat, lon);
-                    User user = userService.getById(update.getMessage().getSender().getUserId());
+                    User user =
+                            userService.getById(update.getMessage().getSender().getUserId());
                     user.setCity(city);
                     userService.save(user);
                     isChange = true;
@@ -55,9 +53,10 @@ public class GeolocationState implements State {
             }
         }
 
-        textToSend = isChange ? StringConstants.GEOLOCATION_UPDATE_SUCCESS.getValue() : StringConstants.GEOLOCATION_UPDATE_FAIL.getValue();
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(textToSend)
-                .build();
+        textToSend = isChange
+                ? StringConstants.GEOLOCATION_UPDATE_SUCCESS.getValue()
+                : StringConstants.GEOLOCATION_UPDATE_FAIL.getValue();
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(textToSend).build();
         Long chatId = update.getMessage().getRecipient().getChatId();
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
         try {
@@ -65,7 +64,6 @@ public class GeolocationState implements State {
         } catch (ClientException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
