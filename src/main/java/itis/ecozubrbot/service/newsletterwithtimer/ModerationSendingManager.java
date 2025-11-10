@@ -2,10 +2,12 @@ package itis.ecozubrbot.service.newsletterwithtimer;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.NewsletterTimerStatus;
-import itis.ecozubrbot.model.ChatdAndMessageBody;
+import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.model.MessageTimer;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
+import ru.max.botapi.model.NewMessageBody;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
@@ -14,7 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import ru.max.botapi.model.NewMessageBody;
 
 public class ModerationSendingManager {
     NewsletterManager newsletterManager;
@@ -25,69 +26,75 @@ public class ModerationSendingManager {
     private ScheduledFuture<?> mainTaskFuture;
     private ScheduledFuture<?> shutdownFuture;
 
-    public ModerationSendingManager(
-            NewsletterManager newsletterManager,
-            MessageTimerRepository messageTimerRepository,
-            ModerationService moderationService) {
+    public ModerationSendingManager(NewsletterManager newsletterManager, MessageTimerRepository messageTimerRepository, ModerationService moderationService) {
         this.newsletterManager = newsletterManager;
         this.messageTimerRepository = messageTimerRepository;
         this.moderationService = moderationService;
         scheduler = Executors.newScheduledThreadPool(2);
+
     }
 
-    public void activateNewsletterModeration(
-            Iterator<ChatdAndMessageBody> moderatorsChat,
-            long idNewsletter,
-            int countModerators,
-            long countChatSec,
-            long maxTimeWorkSec) {
-        // Первоначальная рассылка для модерации первым countMiderators пользователям
+    public void activateNewsletterModeration(Iterator<ChatIdAndMessageBody> moderatorsChat,
+                                             long idNewsletter, int countModerators, long countChatSec, long maxTimeWorkSec) {
+        //Первоначальная рассылка для модерации первым countMiderators пользователям
         while (moderatorsChat.hasNext() && countModerators-- > 0) {
-            ChatdAndMessageBody chatdAndMessageBody = moderatorsChat.next();
-            Long chatId = chatdAndMessageBody.chat_id();
-            NewMessageBody newMessageBody = chatdAndMessageBody.newMessageBody();
+            ChatIdAndMessageBody chatIdAndMessageBody = moderatorsChat.next();
+            Long chatId = chatIdAndMessageBody.chat_id();
+            NewMessageBody newMessageBody = chatIdAndMessageBody.newMessageBody();
             newsletterManager.sendMessage(newMessageBody, chatId);
-            messageTimerRepository.save(
-                    new MessageTimer(idNewsletter, chatId, NewsletterTimerStatus.WAITING, LocalDateTime.now()));
+            messageTimerRepository.save(new MessageTimer(
+                    idNewsletter,
+                    chatId,
+                    NewsletterTimerStatus.WAITING,
+                    LocalDateTime.now()
+            ));
         }
 
         int finalCountModerators = countModerators;
         mainTaskFuture = scheduler.scheduleAtFixedRate(
-                () -> tick(moderatorsChat, idNewsletter, finalCountModerators, countChatSec), 0, 2, TimeUnit.MINUTES);
+                () -> tick(moderatorsChat, idNewsletter, finalCountModerators, countChatSec),
+                0, 2,
+                TimeUnit.MINUTES
+        );
 
         shutdownFuture = scheduler.schedule(
                 () -> stop(moderatorsChat, idNewsletter, finalCountModerators, countChatSec),
                 maxTimeWorkSec,
-                TimeUnit.SECONDS);
+                TimeUnit.SECONDS
+        );
+
     }
 
     // Проверка состояния рассылки
-    private void tick(
-            Iterator<ChatdAndMessageBody> moderatorsChat, long idNewsletter, int countModerators, long countChatSec) {
-        // Считаем количество просрочивших время
+    private void tick(Iterator<ChatIdAndMessageBody> moderatorsChat, long idNewsletter, int countModerators, long countChatSec) {
+        //Считаем количество просрочивших время
         int countNewInactive = changeStatusInactive(idNewsletter, countModerators);
 
-        // Если набрано нужное количетво голосов
-        if (checkIsComplete(idNewsletter, countNewInactive)) {
+        //Если набрано нужное количетво голосов или больш некого опрашивать
+        if(checkIsComplete(idNewsletter, countNewInactive) || !moderatorsChat.hasNext()) {
             stop(moderatorsChat, idNewsletter, countNewInactive, countChatSec);
             return;
         }
 
-        // Отправляем рассылку countNewInactive людям
-        while (moderatorsChat.hasNext() && countNewInactive-- > 0) {
-            ChatdAndMessageBody chatdAndMessageBody = moderatorsChat.next();
-            Long chatId = chatdAndMessageBody.chat_id();
-            NewMessageBody newMessageBody = chatdAndMessageBody.newMessageBody();
+        //Отправляем рассылку countNewInactive людям
+        while(moderatorsChat.hasNext() && countNewInactive-- > 0) {
+            ChatIdAndMessageBody chatIdAndMessageBody = moderatorsChat.next();
+            Long chatId = chatIdAndMessageBody.chat_id();
+            NewMessageBody newMessageBody = chatIdAndMessageBody.newMessageBody();
             newsletterManager.sendMessage(newMessageBody, chatId);
-            messageTimerRepository.save(
-                    new MessageTimer(idNewsletter, chatId, NewsletterTimerStatus.WAITING, LocalDateTime.now()));
+            messageTimerRepository.save(new MessageTimer(
+                    idNewsletter,
+                    chatId,
+                    NewsletterTimerStatus.WAITING,
+                    LocalDateTime.now()
+            ));
         }
+
     }
 
     // Завершение рассылки с таймером
-    private void stop(
-            Iterator<ChatdAndMessageBody> moderatorsChat, long idNewsletter, int countModerators, long countChatSec) {
-        // Закрываем задачи
+    private void stop(Iterator<ChatIdAndMessageBody> moderatorsChat, long idNewsletter, int countModerators, long countChatSec) {
+        //Закрываем задачи
         if (mainTaskFuture != null) {
             mainTaskFuture.cancel(false);
         }
@@ -99,16 +106,11 @@ public class ModerationSendingManager {
 
         // Отправяем результаты опроса в сервис
         List<MessageTimer> messageTimerList = messageTimerRepository.findByNewsLetterId(idNewsletter);
-        moderationService.setResultNewsletterTimer(
-                idNewsletter,
-                messageTimerList.stream()
-                        .filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED
-                                && a.getAnswer() == NewsLetterTimerAnswer.APPROVED)
-                        .count(),
-                messageTimerList.stream()
-                        .filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED
-                                && a.getAnswer() == NewsLetterTimerAnswer.REJECTED)
-                        .count());
+        moderationService.setResultNewsletterTimer(idNewsletter,
+                messageTimerList.stream().filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED && a.getAnswer() == NewsLetterTimerAnswer.APPROVED).count(),
+                messageTimerList.stream().filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED && a.getAnswer() == NewsLetterTimerAnswer.REJECTED).count()
+        );
+
 
         // Закрываем екзекутор
         try {
@@ -121,15 +123,14 @@ public class ModerationSendingManager {
         }
     }
 
-    // Проверка, достаточно ли ответов
+    //Проверка, достаточно ли ответов
     private boolean checkIsComplete(long idNewsletter, int countModerators) {
         return messageTimerRepository.findByNewsLetterId(idNewsletter).stream()
-                        .filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED)
-                        .count()
-                >= countModerators;
+                .filter((a) -> a.getStatus() == NewsletterTimerStatus.REPLIED)
+                .count() >= countModerators;
     }
 
-    // Обновление статусов у пользователей. Возвращает количество обновленных записей на timeout
+    //Обновление статусов у пользователей. Возвращает количество обновленных записей на timeout
     private int changeStatusInactive(long idNewsletter, long countChatSec) {
         List<MessageTimer> messageTimers = messageTimerRepository.findByNewsLetterId(idNewsletter);
         int count = 0;
@@ -158,14 +159,15 @@ public class ModerationSendingManager {
         return count;
     }
 
-    // Приешл ответ от юзера, обновим репозиторий
-    public void cameAnswer(long idNewsletter, long chatId) {
+    //Приешл ответ от юзера, обновим репозиторий
+    public void cameAnswer(long idNewsletter, long chatId, NewsLetterTimerAnswer answer) {
         messageTimerRepository.findByNewsLetterId(idNewsletter).stream()
                 .filter((a) -> a.getChatId() == chatId)
                 .findFirst()
                 .ifPresent(messageTimer -> {
                     messageTimer.setStatus(NewsletterTimerStatus.REPLIED);
                     messageTimer.setTimeResponse(LocalDateTime.now());
+                    messageTimer.setAnswer(answer);
                     messageTimerRepository.update(messageTimer);
                 });
     }
