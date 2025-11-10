@@ -1,5 +1,6 @@
 package itis.ecozubrbot.max.commands.impl;
 
+import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.CommandName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.commands.Command;
@@ -29,9 +30,21 @@ public class StartCommand implements Command {
     @Override
     public void handleCommand(MessageCreatedUpdate update, MaxClient client) {
         List<List<Button>> buttonGrid = new ArrayList<>();
-        List<Button> buttonList = new ArrayList<>();
-        buttonList.add(new CallbackButton("test", "КНОПОЧКА)"));
-        buttonGrid.add(buttonList);
+        List<Button> buttonRow1 = new ArrayList<>();
+        buttonRow1.add(new CallbackButton(
+                CallbackName.TAMAGOTCHI.getCallbackName(), StringConstants.TAMAGOTCHI_BUTTON.getValue()));
+        buttonRow1.add(new CallbackButton(CallbackName.SHOP.getCallbackName(), StringConstants.SHOP_BUTTON.getValue()));
+        buttonGrid.add(buttonRow1);
+        List<Button> buttonRow2 = new ArrayList<>();
+        buttonRow2.add(
+                new CallbackButton(CallbackName.EVENTS.getCallbackName(), StringConstants.EVENTS_BUTTON.getValue()));
+        buttonRow2.add(
+                new CallbackButton(CallbackName.TASKS.getCallbackName(), StringConstants.TASKS_BUTTON.getValue()));
+        buttonGrid.add(buttonRow2);
+        List<Button> buttonRow3 = new ArrayList<>();
+        buttonRow3.add(
+                new CallbackButton(CallbackName.PROFILE.getCallbackName(), StringConstants.PROFILE_BUTTON.getValue()));
+        buttonGrid.add(buttonRow3);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.START.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(buttonGrid)))
                 .build();
