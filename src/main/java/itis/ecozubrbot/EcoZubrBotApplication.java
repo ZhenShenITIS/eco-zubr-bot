@@ -1,5 +1,6 @@
 package itis.ecozubrbot;
 
+import itis.ecozubrbot.admincontrol.AdminControl;
 import itis.ecozubrbot.max.EcoZubrBot;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ public class EcoZubrBotApplication {
     public CommandLineRunner commandLineRunner(EcoZubrBot bot) {
         return args -> {
             bot.start();
+            new AdminControl(bot).start();
         };
     }
 }

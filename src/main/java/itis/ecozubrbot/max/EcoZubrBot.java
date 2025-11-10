@@ -6,8 +6,13 @@ import itis.ecozubrbot.repositories.StateRepository;
 import org.springframework.stereotype.Component;
 import ru.max.bot.annotations.UpdateHandler;
 import ru.max.bot.longpolling.LongPollingBot;
+import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.MessageCreatedUpdate;
+import ru.max.botapi.model.NewMessageBody;
+import ru.max.botapi.queries.SendMessageQuery;
+
+import java.util.List;
 
 @Component
 public class EcoZubrBot extends LongPollingBot {
