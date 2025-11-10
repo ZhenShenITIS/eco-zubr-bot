@@ -6,7 +6,12 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CallbackName {
-    TEST("test");
+    TEST("test"),
+    PET("pet"),
+    TASKS("tasks"),
+    SHOP("shop"),
+    PROFILE("profile"),
+    EVENTS("events");
 
     private final String callbackName;
 }
