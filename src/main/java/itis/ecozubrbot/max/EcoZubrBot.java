@@ -13,6 +13,8 @@ import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.MessageCreatedUpdate;
 import ru.max.botapi.model.Update;
 
+import java.util.List;
+
 @Component
 public class EcoZubrBot extends LongPollingBot {
 
