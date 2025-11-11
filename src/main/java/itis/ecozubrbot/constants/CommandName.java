@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum CommandName {
-    START("/start"),
+    MENU("/menu"),
     UNKNOWN("/"),
     HELP("/help");
 

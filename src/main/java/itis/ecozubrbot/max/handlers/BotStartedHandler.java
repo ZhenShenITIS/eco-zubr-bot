@@ -5,6 +5,7 @@ import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.helpers.UserMapper;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.StateRepository;
+import itis.ecozubrbot.services.PetService;
 import itis.ecozubrbot.services.UserService;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,8 @@ public class BotStartedHandler {
 
     private UserService userService;
 
+    private PetService petService;
+
     private StateRepository stateRepository;
 
     public void onBotStarted(BotStartedUpdate update, MaxClient client) {
@@ -32,6 +35,7 @@ public class BotStartedHandler {
         User user = UserMapper.getEntityFromMaxUser(update.getUser(), chatId);
         user.setCreatedDate(LocalDate.now());
         userService.save(user);
+        petService.getOrCreatePet(user.getId());
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.START_BOT_UPDATE.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(
                         new RequestGeoLocationButton(StringConstants.GEOLOCATION_BUTTON.getValue()))))

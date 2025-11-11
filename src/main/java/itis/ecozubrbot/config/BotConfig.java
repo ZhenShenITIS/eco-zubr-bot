@@ -14,4 +14,9 @@ public class BotConfig {
     public String accessToken() {
         return MAX_TOKEN;
     }
+
+    @Bean
+    public String uploadsEndpoint() {
+        return "https://platform-api.max.ru/uploads";
+    }
 }

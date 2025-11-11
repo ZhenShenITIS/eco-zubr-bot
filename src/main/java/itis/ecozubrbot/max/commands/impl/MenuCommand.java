@@ -19,8 +19,8 @@ import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
-public class StartCommand implements Command {
-    private final CommandName commandName = CommandName.START;
+public class MenuCommand implements Command {
+    private final CommandName commandName = CommandName.MENU;
 
     @Override
     public CommandName getCommand() {
