@@ -21,8 +21,8 @@ import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class AddChallengeCommand implements Command {
-    private final CommandName commandName = CommandName.ADD_CHALLENGE;
+public class AddContentCommand implements Command {
+    private final CommandName commandName = CommandName.ADD_CONTENT;
     private StateRepository stateRepository;
     private UserService userService;
 
@@ -38,7 +38,7 @@ public class AddChallengeCommand implements Command {
             return;
         }
 
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CHALLENGE_INFO.getValue())
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CONTENT_INFO.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
                         CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()))))
                 .build();
@@ -46,7 +46,7 @@ public class AddChallengeCommand implements Command {
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
 
         // устанавливаем состояние add challenge
-        stateRepository.put(update.getMessage().getSender().getUserId(), StateName.ADD_CHALLENGE);
+        stateRepository.put(update.getMessage().getSender().getUserId(), StateName.ADD_CONTENT);
 
         try {
             query.enqueue();

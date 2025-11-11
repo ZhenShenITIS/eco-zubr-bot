@@ -1,7 +1,7 @@
 package itis.ecozubrbot.config;
 
 import itis.ecozubrbot.max.commands.Command;
-import itis.ecozubrbot.max.commands.impl.AddChallengeCommand;
+import itis.ecozubrbot.max.commands.impl.AddContentCommand;
 import itis.ecozubrbot.max.commands.impl.HelpCommand;
 import itis.ecozubrbot.max.commands.impl.MenuCommand;
 import itis.ecozubrbot.max.containers.CommandContainer;
@@ -15,14 +15,14 @@ import org.springframework.context.annotation.Configuration;
 public class CommandConfig {
     private HelpCommand helpCommand;
     private MenuCommand menuCommand;
-    private AddChallengeCommand addChallengeCommand;
+    private AddContentCommand addContentCommand;
     private List<Command> commandList;
 
     @Bean
     public CommandContainer commandContainer() {
         commandList.add(helpCommand);
         commandList.add(menuCommand);
-        commandList.add(addChallengeCommand);
+        commandList.add(addContentCommand);
         return new CommandContainer(commandList);
     }
 }

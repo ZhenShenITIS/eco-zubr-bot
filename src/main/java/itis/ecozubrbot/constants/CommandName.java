@@ -9,7 +9,7 @@ public enum CommandName {
     MENU("/menu"),
     UNKNOWN("/"),
     HELP("/help"),
-    ADD_CHALLENGE("/add_challenge");
+    ADD_CONTENT("/add_content");
 
     private final String commandName;
 }

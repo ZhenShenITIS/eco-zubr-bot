@@ -6,9 +6,8 @@ import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
 import itis.ecozubrbot.max.handlers.MessageCallbackHandler;
 import itis.ecozubrbot.max.states.State;
 import itis.ecozubrbot.repositories.StateRepository;
-import itis.ecozubrbot.services.ChallengeService;
+import itis.ecozubrbot.services.ChallengeEventService;
 import lombok.AllArgsConstructor;
-import org.json.*;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.botapi.client.MaxClient;
@@ -18,10 +17,10 @@ import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class AddChallengeState implements State {
-    private final StateName stateName = StateName.ADD_CHALLENGE;
+public class AddContentState implements State {
+    private final StateName stateName = StateName.ADD_CONTENT;
+    private final ChallengeEventService challengeEventService;
     private StateRepository stateRepository;
-    private ChallengeService challengeService;
     private MessageCallbackHandler messageCallbackHandler;
 
     @Override
@@ -49,13 +48,13 @@ public class AddChallengeState implements State {
 
         NewMessageBody replyMessage;
         try {
-            challengeService.addChallenge(text, photoToken);
+            challengeEventService.add(text, photoToken);
             // возвращаем состояние на нормальное
             stateRepository.put(update.getMessage().getSender().getUserId(), StateName.DEFAULT);
-            replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CHALLENGE_SUCCESS.getValue())
+            replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CONTENT_SUCCESS.getValue())
                     .build();
         } catch (IncorrectJsonStringChallengeException e) {
-            replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CHALLENGE_FAIL.getValue())
+            replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CONTENT_FAIL.getValue())
                     .build();
         }
 

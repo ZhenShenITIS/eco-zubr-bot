@@ -5,5 +5,5 @@ public enum StateName {
     GEOLOCATION,
     UPLOAD_IMAGE,
     TEST,
-    ADD_CHALLENGE
+    ADD_CONTENT
 }
