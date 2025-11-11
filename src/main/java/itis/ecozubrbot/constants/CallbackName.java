@@ -11,7 +11,10 @@ public enum CallbackName {
     TASKS("tasks"),
     SHOP("shop"),
     PROFILE("profile"),
-    EVENTS("events");
+    EVENTS("events"),
+    CARESS("caress"),
+    BACK_TO_MENU("back_to_menu"),
+    BACK_TO_PET_START("back_to_pet_start");
 
     private final String callbackName;
 }

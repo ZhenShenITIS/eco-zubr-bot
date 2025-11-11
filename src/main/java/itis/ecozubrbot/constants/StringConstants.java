@@ -14,9 +14,15 @@ public enum StringConstants {
     TASKS_BUTTON("Задания"),
     EVENTS_BUTTON("События"),
     SHOP_BUTTON("Магазин"),
+    BACK_BUTTON("Назад"),
     PROFILE_BUTTON("Профиль"),
     GEOLOCATION_BUTTON("Геолокация"),
     GEOLOCATION_UPDATE_SUCCESS("Геолокация успешно задана!"),
-    GEOLOCATION_UPDATE_FAIL("Не удалось обновить геолокацию, попробуйте снова");
+    GEOLOCATION_UPDATE_FAIL("Не удалось обновить геолокацию, попробуйте снова"),
+    USER_NOT_FOUND("Мы не смогли определить вас. Скорее всего, вы не прошли процесс регистрации"),
+    PET_START_MESSAGE("Это твой виртуальный зверёк!\n\nОпыт: %s"),
+    CARESS_BUTTON("Приласкать"),
+    CARESS_ANSWER("\uD83E\uDD7A\uD83D\uDC9E..."),
+    BACK_TO_MENU_BUTTON("Вернуться в меню");
     private String value;
 }

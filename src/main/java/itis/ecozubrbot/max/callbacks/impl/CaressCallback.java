@@ -5,8 +5,7 @@ import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.helpers.PetUtils;
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.models.Pet;
-import itis.ecozubrbot.services.PetService;
-import itis.ecozubrbot.services.UserService;
+import itis.ecozubrbot.repositories.jpa.PetRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -21,31 +20,24 @@ import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class PetStartCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.PET;
-    private PetService petService;
-    private UserService userService;
+public class CaressCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.CARESS;
+
+    private PetRepository petRepository;
+
     private PetUtils petUtils;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long chatId = update.getMessage().getRecipient().getChatId();
-        Long userId = update.getCallback().getUser().getUserId();
-
-        Pet pet = petService.getOrCreatePet(userId);
-
-        int xp = pet.getExperience();
-        String token = petUtils.getImageOfPet(xp);
-
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(
-                        StringConstants.PET_START_MESSAGE.getValue().formatted(xp))
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.singleColumn(
-                                new CallbackButton(
-                                        CallbackName.CARESS.getCallbackName(),
-                                        StringConstants.CARESS_BUTTON.getValue()),
-                                new CallbackButton(
-                                        CallbackName.BACK_TO_MENU.getCallbackName(),
-                                        StringConstants.BACK_TO_MENU_BUTTON.getValue())))
+        Pet pet = petRepository
+                .findById(update.getCallback().getUser().getUserId())
+                .orElse(null);
+        String token = petUtils.getImageOfPetWithHearts(pet.getExperience());
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CARESS_ANSWER.getValue())
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
+                                CallbackName.BACK_TO_PET_START.getCallbackName(),
+                                StringConstants.BACK_BUTTON.getValue())))
                         .with(AttachmentsBuilder.photos(token)))
                 .build();
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
