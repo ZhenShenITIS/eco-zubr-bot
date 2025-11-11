@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum CommandName {
     MENU("/menu"),
     UNKNOWN("/"),
-    HELP("/help");
+    HELP("/help"),
+    ADD_CHALLENGE("/add_challenge");
 
     private final String commandName;
 }
