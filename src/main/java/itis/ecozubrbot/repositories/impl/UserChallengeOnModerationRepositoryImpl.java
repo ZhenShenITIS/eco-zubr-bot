@@ -16,6 +16,11 @@ public class UserChallengeOnModerationRepositoryImpl implements UserChallengeOnM
     }
 
     @Override
+    public void remove(Long userId) {
+        map.remove(userId);
+    }
+
+    @Override
     public Long getUserChallengeId(Long userId) {
         return map.get(userId);
     }

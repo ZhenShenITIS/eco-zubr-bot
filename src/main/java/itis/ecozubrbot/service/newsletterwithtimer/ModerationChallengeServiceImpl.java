@@ -9,11 +9,14 @@ import itis.ecozubrbot.repositories.MessageTimerRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.stereotype.Component;
 import ru.max.botapi.model.NewMessageBody;
 
 record NewsLetterContext(
         long ChatIdSender, ModerationSendingManager manager, NewMessageBody isApproved, NewMessageBody isRejected) {}
 
+@Component
 public class ModerationChallengeServiceImpl implements ModerationService {
 
     NewsletterManager newsletterManager;

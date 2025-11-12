@@ -3,7 +3,7 @@ package itis.ecozubrbot.service.newsletterwithtimer;
 import itis.ecozubrbot.models.UserChallenge;
 import ru.max.botapi.model.MessageCallbackUpdate;
 
-public interface MderationChallengeFirstService {
+public interface ModerationChallengeFirstService {
     // Отправить на модерацию
     void createModeration(UserChallenge userChallenge);
 
