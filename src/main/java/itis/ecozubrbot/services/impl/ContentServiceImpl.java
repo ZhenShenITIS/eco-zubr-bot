@@ -1,8 +1,8 @@
 package itis.ecozubrbot.services.impl;
 
 import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
-import itis.ecozubrbot.services.ContentService;
 import itis.ecozubrbot.services.ChallengeService;
+import itis.ecozubrbot.services.ContentService;
 import itis.ecozubrbot.services.EventService;
 import itis.ecozubrbot.services.RewardService;
 import lombok.AllArgsConstructor;
