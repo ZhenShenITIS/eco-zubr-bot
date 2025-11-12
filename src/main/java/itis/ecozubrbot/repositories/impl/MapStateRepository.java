@@ -1,8 +1,10 @@
-package itis.ecozubrbot.repositories;
+package itis.ecozubrbot.repositories.impl;
 
 import itis.ecozubrbot.constants.StateName;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import itis.ecozubrbot.repositories.StateRepository;
 import org.springframework.stereotype.Component;
 
 @Component

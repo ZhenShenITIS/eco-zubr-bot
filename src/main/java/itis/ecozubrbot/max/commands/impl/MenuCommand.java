@@ -19,8 +19,8 @@ import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
-public class StartCommand implements Command {
-    private final CommandName commandName = CommandName.START;
+public class MenuCommand implements Command {
+    private final CommandName commandName = CommandName.MENU;
 
     @Override
     public CommandName getCommand() {
@@ -37,8 +37,8 @@ public class StartCommand implements Command {
         List<Button> buttonRow2 = new ArrayList<>();
         buttonRow2.add(
                 new CallbackButton(CallbackName.EVENTS.getCallbackName(), StringConstants.EVENTS_BUTTON.getValue()));
-        buttonRow2.add(
-                new CallbackButton(CallbackName.TASKS.getCallbackName(), StringConstants.TASKS_BUTTON.getValue()));
+        buttonRow2.add(new CallbackButton(
+                CallbackName.CHALLENGES.getCallbackName() + ":0", StringConstants.TASKS_BUTTON.getValue()));
         buttonGrid.add(buttonRow2);
         List<Button> buttonRow3 = new ArrayList<>();
         buttonRow3.add(

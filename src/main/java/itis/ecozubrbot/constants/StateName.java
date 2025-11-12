@@ -3,5 +3,7 @@ package itis.ecozubrbot.constants;
 public enum StateName {
     DEFAULT,
     GEOLOCATION,
-    TEST
+    UPLOAD_IMAGE,
+    TEST,
+    ADD_CONTENT
 }

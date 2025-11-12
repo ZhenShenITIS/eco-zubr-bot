@@ -1,12 +1,7 @@
 package itis.ecozubrbot.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,10 +21,14 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 200)
     private String title;
+
+    @Column(columnDefinition = "text")
     private String description;
+
     private String city;
-    private LocalDate endDateTime;
+    private LocalDateTime endDateTime;
     private Integer experienceReward;
     private Integer pointsReward;
     private String imageUrl;

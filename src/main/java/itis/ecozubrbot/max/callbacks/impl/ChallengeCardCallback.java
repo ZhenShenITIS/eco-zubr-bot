@@ -2,11 +2,9 @@ package itis.ecozubrbot.max.callbacks.impl;
 
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
-import itis.ecozubrbot.helpers.PetUtils;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Pet;
-import itis.ecozubrbot.services.PetService;
-import itis.ecozubrbot.services.UserService;
+import itis.ecozubrbot.models.Challenge;
+import itis.ecozubrbot.services.ChallengeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -17,38 +15,32 @@ import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
-import ru.max.botapi.queries.SendMessageQuery;
+import ru.max.botapi.queries.EditMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class PetStartCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.PET;
-    private PetService petService;
-    private UserService userService;
-    private PetUtils petUtils;
+public class ChallengeCardCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.CHALLENGE_CARD;
+    private ChallengeService challengeService;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long chatId = update.getMessage().getRecipient().getChatId();
-        Long userId = update.getCallback().getUser().getUserId();
-
-        Pet pet = petService.getOrCreatePet(userId);
-
-        int xp = pet.getExperience();
-        String token = petUtils.getImageOfPet(xp);
-
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(
-                        StringConstants.PET_START_MESSAGE.getValue().formatted(xp))
+        Long challengeId = Long.parseLong(update.getCallback().getPayload().split(":")[1]);
+        int nextIndex = Integer.parseInt(update.getCallback().getPayload().split(":")[2]);
+        Challenge challenge = challengeService.getById(challengeId);
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(challenge.toString())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.singleColumn(
                                 new CallbackButton(
-                                        CallbackName.CARESS.getCallbackName(),
-                                        StringConstants.CARESS_BUTTON.getValue()),
+                                        CallbackName.CHALLENGE_DONE.getCallbackName() + ":" + challengeId,
+                                        StringConstants.CHALLENGE_DONE_BUTTON.getValue()),
                                 new CallbackButton(
-                                        CallbackName.BACK_TO_MENU.getCallbackName(),
-                                        StringConstants.BACK_TO_MENU_BUTTON.getValue())))
-                        .with(AttachmentsBuilder.photos(token)))
+                                        CallbackName.CHALLENGES.getCallbackName() + ":" + nextIndex,
+                                        StringConstants.BACK_BUTTON.getValue())))
+                        .with(AttachmentsBuilder.photos(challenge.getImageUrl())))
                 .build();
-        SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
+        EditMessageQuery query = new EditMessageQuery(
+                client, replyMessage, update.getMessage().getBody().getMid());
         try {
             query.enqueue();
         } catch (ClientException e) {

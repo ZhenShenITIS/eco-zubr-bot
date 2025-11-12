@@ -1,11 +1,6 @@
 package itis.ecozubrbot.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -25,8 +20,12 @@ public class Challenge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 200)
     private String title;
+
+    @Column(columnDefinition = "text")
     private String description;
+
     private Integer experienceReward;
     private Integer pointsReward;
     private String imageUrl;
@@ -34,4 +33,9 @@ public class Challenge {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return title + "\n\n" + description + "\n\nНаграда в очках и опыте:\n" + pointsReward + "/" + experienceReward;
+    }
 }

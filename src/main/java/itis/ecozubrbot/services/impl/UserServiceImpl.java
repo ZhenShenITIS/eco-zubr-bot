@@ -1,5 +1,6 @@
 package itis.ecozubrbot.services.impl;
 
+import itis.ecozubrbot.constants.UserRole;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import itis.ecozubrbot.services.UserService;
@@ -19,5 +20,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public boolean isAdmin(Long id) {
+        return getById(id).getRole().equals(UserRole.ADMIN);
     }
 }

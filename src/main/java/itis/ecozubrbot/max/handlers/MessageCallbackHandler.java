@@ -13,6 +13,8 @@ public class MessageCallbackHandler {
     private CallbackContainer callbackContainer;
 
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
-        callbackContainer.retrieveCallback(update.getCallback().getPayload()).handleMessageCallback(update, client);
+        callbackContainer
+                .retrieveCallback(update.getCallback().getPayload().split(":")[0])
+                .handleMessageCallback(update, client);
     }
 }

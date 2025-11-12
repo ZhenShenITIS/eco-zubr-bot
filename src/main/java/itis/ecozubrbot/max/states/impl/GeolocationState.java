@@ -1,7 +1,8 @@
-package itis.ecozubrbot.max.states;
+package itis.ecozubrbot.max.states.impl;
 
 import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
+import itis.ecozubrbot.max.states.State;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.services.GeoLocationService;
