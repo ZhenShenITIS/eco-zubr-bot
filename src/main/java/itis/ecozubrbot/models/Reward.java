@@ -24,7 +24,7 @@ public class Reward {
     private String title;
     private String description;
     private Integer pointsCost;
-    private Integer value;
+    private String value;
     private Integer availableQuantity;
     private String imageUrl;
 }

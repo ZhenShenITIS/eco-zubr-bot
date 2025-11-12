@@ -28,7 +28,7 @@ public enum StringConstants {
     VOID("⠀"),
     CHALLENGE_DONE_BUTTON("Челлендж выполнен!"),
     BACK_TO_MENU_BUTTON("Вернуться в меню"),
-    ADD_CONTENT_INFO("Отправь корректный json текст для добавления челленджа/события и прикрепи картинку"),
+    ADD_CONTENT_INFO("Отправь корректный json текст для добавления челленджа/события/награды и прикрепи картинку"),
     ADD_CONTENT_SUCCESS("Успешно добавлено"),
     ADD_CONTENT_FAIL("Не удалось добавить, попробуйте ещё раз");
     private final String value;
