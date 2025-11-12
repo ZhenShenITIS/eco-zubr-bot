@@ -16,6 +16,7 @@ public enum StringConstants {
     SHOP_BUTTON("Магазин"),
     BACK_BUTTON("Назад"),
     PROFILE_BUTTON("Профиль"),
+    LEADERBOARD_BUTTON("Рейтинг"),
     GEOLOCATION_BUTTON("Геолокация"),
     GEOLOCATION_UPDATE_SUCCESS("Геолокация успешно задана!"),
     GEOLOCATION_UPDATE_FAIL("Не удалось обновить геолокацию, попробуйте снова"),
@@ -30,6 +31,13 @@ public enum StringConstants {
     BACK_TO_MENU_BUTTON("Вернуться в меню"),
     ADD_CONTENT_INFO("Отправь корректный json текст для добавления челленджа/события/награды и прикрепи картинку"),
     ADD_CONTENT_SUCCESS("Успешно добавлено"),
-    ADD_CONTENT_FAIL("Не удалось добавить, попробуйте ещё раз");
+    ADD_CONTENT_FAIL("Не удалось добавить, попробуйте ещё раз"),
+    LEADERBOARD_LIST_INFO("\uD83C\uDFC6 Рейтинг"), // 🏆
+    LEADERBOARD_1_PLACE("\uD83E\uDD47 место: %s (%d XP)"), // 🥇
+    LEADERBOARD_2_PLACE("\uD83E\uDD48 место: %s (%d XP)"),
+    LEADERBOARD_3_PLACE("\uD83E\uDD49 место: %s (%d XP)"),
+    LEADERBOARD_4_PLACE("4️⃣ место: %s (%d XP)"),
+    LEADERBOARD_5_PLACE("5️⃣ место: %s (%d XP)"),
+    LEADERBOARD_YOUR_PLACE("⭐ %d место: %s (%d XP)");
     private final String value;
 }

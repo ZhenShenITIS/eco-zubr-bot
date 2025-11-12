@@ -11,6 +11,7 @@ public enum CallbackName {
     CHALLENGES("challenges"),
     SHOP("shop"),
     PROFILE("profile"),
+    LEADERBOARD("leaderboard"),
     EVENTS("events"),
     CARESS("caress"),
     BACK_TO_MENU("back_to_menu"),
