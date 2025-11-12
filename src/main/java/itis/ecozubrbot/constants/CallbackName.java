@@ -17,7 +17,8 @@ public enum CallbackName {
     BACK_TO_MENU("back_to_menu"),
     CHALLENGE_CARD("challenge_card"),
     CHALLENGE_DONE("challenge_done"),
-    BACK_TO_PET_START("back_to_pet_start");
+    BACK_TO_PET_START("back_to_pet_start"),
+    CHANGE_CITY("change_city");
 
     private final String callbackName;
 }
