@@ -43,6 +43,8 @@ public class MenuCommand implements Command {
         List<Button> buttonRow3 = new ArrayList<>();
         buttonRow3.add(
                 new CallbackButton(CallbackName.PROFILE.getCallbackName(), StringConstants.PROFILE_BUTTON.getValue()));
+        buttonRow3.add(new CallbackButton(
+                CallbackName.LEADERBOARD.getCallbackName(), StringConstants.LEADERBOARD_BUTTON.getValue()));
         buttonGrid.add(buttonRow3);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.START.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(buttonGrid)))
