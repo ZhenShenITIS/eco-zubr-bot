@@ -6,7 +6,7 @@ import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
 import itis.ecozubrbot.max.handlers.MessageCallbackHandler;
 import itis.ecozubrbot.max.states.State;
 import itis.ecozubrbot.repositories.StateRepository;
-import itis.ecozubrbot.services.ChallengeEventService;
+import itis.ecozubrbot.services.ContentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -19,7 +19,7 @@ import ru.max.botapi.queries.SendMessageQuery;
 @AllArgsConstructor
 public class AddContentState implements State {
     private final StateName stateName = StateName.ADD_CONTENT;
-    private final ChallengeEventService challengeEventService;
+    private final ContentService contentService;
     private StateRepository stateRepository;
     private MessageCallbackHandler messageCallbackHandler;
 
@@ -48,7 +48,7 @@ public class AddContentState implements State {
 
         NewMessageBody replyMessage;
         try {
-            challengeEventService.add(text, photoToken);
+            contentService.add(text, photoToken);
             // возвращаем состояние на нормальное
             stateRepository.put(update.getMessage().getSender().getUserId(), StateName.DEFAULT);
             replyMessage = NewMessageBodyBuilder.ofText(StringConstants.ADD_CONTENT_SUCCESS.getValue())
