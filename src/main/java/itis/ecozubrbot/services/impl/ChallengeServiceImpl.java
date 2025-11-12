@@ -7,6 +7,7 @@ import itis.ecozubrbot.services.ChallengeService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +17,19 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<Challenge> getChallenges() {
-        return List.of();
+        return challengeRepository.findAll();
+    }
+
+    @Override
+    public Challenge getById(Long id) {
+        return challengeRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Challenge> getChallengesSortedByPoints() {
+        return challengeRepository.findAll(Sort.by("pointsReward")
+                .descending()
+                .and(Sort.by("experienceReward").descending()));
     }
 
     @Override

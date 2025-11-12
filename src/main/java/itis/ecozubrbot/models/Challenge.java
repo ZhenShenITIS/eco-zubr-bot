@@ -33,4 +33,9 @@ public class Challenge {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserChallenge> userChallenges = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return title + "\n\n" + description + "\n\nНаграда в очках и опыте:\n" + pointsReward + "/" + experienceReward;
+    }
 }
