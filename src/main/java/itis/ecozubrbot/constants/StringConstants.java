@@ -23,6 +23,9 @@ public enum StringConstants {
     PET_START_MESSAGE("Это твой виртуальный зверёк!\n\nОпыт: %s"),
     CARESS_BUTTON("Приласкать"),
     CARESS_ANSWER("\uD83E\uDD7A\uD83D\uDC9E..."),
-    BACK_TO_MENU_BUTTON("Вернуться в меню");
-    private String value;
+    BACK_TO_MENU_BUTTON("Вернуться в меню"),
+    ADD_CONTENT_INFO("Отправь корректный json текст для добавления челленджа/события и прикрепи картинку"),
+    ADD_CONTENT_SUCCESS("Успешно добавлено"),
+    ADD_CONTENT_FAIL("Не удалось добавить, попробуйте ещё раз");
+    private final String value;
 }
