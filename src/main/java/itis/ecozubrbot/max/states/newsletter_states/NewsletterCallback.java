@@ -1,5 +1,7 @@
 package itis.ecozubrbot.max.states.newsletter_states;
 
+import itis.ecozubrbot.quiz.QuizGetAnswerService;
+import itis.ecozubrbot.quiz.QuizService;
 import itis.ecozubrbot.service.newsletterwithtimer.ModerationEventFirstService;
 import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationChallengeFirstServiceImpl;
 import lombok.AllArgsConstructor;
@@ -11,8 +13,10 @@ import ru.max.botapi.model.MessageCallbackUpdate;
 @AllArgsConstructor
 public class NewsletterCallback {
 
+    private final QuizService quizService;
     ModerationChallengeFirstServiceImpl moderationChallengeFirstService;
     ModerationEventFirstService moderationEventFirstService;
+    QuizGetAnswerService quizGetAnswerService;
 
     public void handlerCallback(MessageCallbackUpdate update, MaxClient client) {
         String type = update.getCallback().getPayload().split(":")[0];
@@ -23,6 +27,10 @@ public class NewsletterCallback {
             }
             case "newsletterF": {
                 moderationEventFirstService.cameAnswer(update, client);
+                break;
+            }
+            case "newsletterQ": {
+                quizGetAnswerService.cameAnswer(update, client);
             }
         }
     }
