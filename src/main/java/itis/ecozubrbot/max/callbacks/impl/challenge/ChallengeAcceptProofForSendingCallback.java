@@ -43,7 +43,6 @@ public class ChallengeAcceptProofForSendingCallback implements Callback {
             throw new RuntimeException(e);
         }
         stateRepository.put(userId, StateName.DEFAULT);
-
     }
 
     @Override

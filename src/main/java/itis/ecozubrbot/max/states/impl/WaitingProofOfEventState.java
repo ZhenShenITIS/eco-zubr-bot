@@ -32,8 +32,7 @@ public class WaitingProofOfEventState implements State {
     private final StateRepository stateRepository;
 
     @Override
-    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
-    }
+    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
 
     @Override
     public void handleMessageCreated(MessageCreatedUpdate update, MaxClient client) {
@@ -64,8 +63,7 @@ public class WaitingProofOfEventState implements State {
                                     CallbackName.EVENT_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
                                     StringConstants.ACCEPT_PROOF_FOR_SENDING.getValue())))))
                     .build();
-            UserEvent userEvent =
-                    userEventService.getById(userEventOnModerationRepository.getUserEventId(userId));
+            UserEvent userEvent = userEventService.getById(userEventOnModerationRepository.getUserEventId(userId));
             userEvent.setProofDescription(text);
             userEvent.setProofImageUrl(photoToken);
             userEventService.save(userEvent);

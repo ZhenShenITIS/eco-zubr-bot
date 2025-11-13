@@ -3,16 +3,15 @@ package itis.ecozubrbot.service.newsletterwithtimer.event;
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.models.Pet;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserEvent;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
 import itis.ecozubrbot.repositories.impl.MapMessageTimerRepository;
-import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
-import itis.ecozubrbot.repositories.jpa.UserEventRepository;
-import itis.ecozubrbot.repositories.jpa.UserRepository;
+import itis.ecozubrbot.repositories.jpa.*;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
 import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationSendingManager;
-import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationService;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
@@ -22,16 +21,23 @@ import ru.max.botapi.model.NewMessageBody;
 @Component
 public class ModerationEventServiceImpl implements ModerationService {
 
+    private final EventRepository eventRepository;
+
+    public ModerationEventServiceImpl(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
     record NewsLetterContext(
             long ChatIdSender,
             ModerationSendingManager manager,
             NewMessageBody isApproved,
             NewMessageBody isRejected) {}
 
+    UserRepository userRepository;
     NewsletterManager newsletterManager;
     MessageTimerRepository messageTimerRepository;
     UserEventRepository userEventRepository;
-    UserRepository userRepository;
+    PetRepository petRepository;
 
     // TODO: ИЗМЕНИТ НА 2
     private final int COUNT_MODERATORS = 1;
@@ -58,10 +64,14 @@ public class ModerationEventServiceImpl implements ModerationService {
         userEventRepository.save(userEvent);
         User user = userEvent.getUser();
         Integer userPoints = user.getPoints();
+        Pet pet = user.getPet();
         if (userPoints == null) {
             userPoints = 0;
         }
-        user.setPoints(userPoints + userEvent.getEvent().getPointsReward());
+        pet.setExperience(pet.getExperience() + userEvent.getEvent().getExperienceReward());
+        user.setPoints(user.getPoints() + userEvent.getEvent().getPointsReward());
+
+        petRepository.save(pet);
         userRepository.save(user);
     }
 
@@ -90,12 +100,14 @@ public class ModerationEventServiceImpl implements ModerationService {
             NewMessageBody isRejected,
             MaxClient client,
             UserEventRepository userEventRepository,
+            PetRepository petRepository,
             UserRepository userRepository) {
 
+        this.userRepository = userRepository;
+        this.petRepository = petRepository;
         newsletterManager = new NewsletterManager(client);
         messageTimerRepository = new MapMessageTimerRepository();
         this.userEventRepository = userEventRepository;
-        this.userRepository = userRepository;
         // Создать менеджер управление рассылкой
         ModerationSendingManager manager =
                 new ModerationSendingManager(newsletterManager, messageTimerRepository, this);

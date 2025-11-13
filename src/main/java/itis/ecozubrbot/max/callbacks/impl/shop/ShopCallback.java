@@ -4,9 +4,10 @@ import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.models.Reward;
 import itis.ecozubrbot.services.RewardService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -19,10 +20,6 @@ import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.EditMessageQuery;
-import ru.max.botapi.queries.SendMessageQuery;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -39,14 +36,14 @@ public class ShopCallback implements Callback {
         List<List<Button>> layout = new ArrayList<>();
         int countOfIncrease = 0;
         int i;
-        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), rewards.size() - nextIndex);
+        int bounds =
+                nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), rewards.size() - nextIndex);
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Reward reward = rewards.get(i);
             row.add(new CallbackButton(
                     CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex,
-                    reward.getTitle() + " | " + reward.getPointsCost() + "/"
-                            + reward.getAvailableQuantity()));
+                    reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity()));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
@@ -57,12 +54,10 @@ public class ShopCallback implements Callback {
 
         arrowRow.add(new CallbackButton(CallbackName.EMPTY.getCallbackName(), StringConstants.VOID.getValue()));
 
-        CallbackName forwardCallback = (i == rewards.size()) ?
-                CallbackName.EMPTY :
-                callbackName.SHOP;
+        CallbackName forwardCallback = (i == rewards.size()) ? CallbackName.EMPTY : callbackName.SHOP;
 
         arrowRow.add(new CallbackButton(
-                forwardCallback.getCallbackName()+ ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
+                forwardCallback.getCallbackName() + ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
         layout.add(arrowRow);
         List<Button> backButton = List.of(new CallbackButton(
                 CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));

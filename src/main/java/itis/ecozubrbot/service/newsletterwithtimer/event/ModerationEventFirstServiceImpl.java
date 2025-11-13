@@ -6,6 +6,7 @@ import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserEvent;
 import itis.ecozubrbot.newsletter.NewsletterManager;
+import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserEventRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import itis.ecozubrbot.service.newsletterwithtimer.ModerationEventFirstService;
@@ -30,6 +31,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
     UserRepository userRepository;
     ModerationEventServiceImpl moderationEventService;
     UserEventRepository userEventRepository;
+    PetRepository petRepository;
 
     public void createModeration(UserEvent userEvent, MaxClient client) {
 
@@ -63,9 +65,9 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
         for (User user : users) {
             NewMessageBody messageBody;
             Button buttonAccept = new CallbackButton(
-                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
+                    "newsletterF" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
             Button buttonReject = new CallbackButton(
-                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
+                    "newsletterF" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
 
             List<Button> buttons = Arrays.asList(buttonAccept, buttonReject);
             messageBody = NewMessageBodyBuilder.ofText("Модерация на следующее событие: "
@@ -103,6 +105,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
                 rejectedMessage,
                 client,
                 userEventRepository,
+                petRepository,
                 userRepository);
     }
 

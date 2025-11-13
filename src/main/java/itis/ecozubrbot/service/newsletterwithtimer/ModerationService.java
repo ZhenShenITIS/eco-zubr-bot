@@ -1,7 +1,8 @@
-package itis.ecozubrbot.service.newsletterwithtimer.challenge;
+package itis.ecozubrbot.service.newsletterwithtimer;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserEventRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
@@ -30,6 +31,7 @@ public interface ModerationService {
             NewMessageBody isRejected,
             MaxClient client,
             UserEventRepository userEventRepository,
+            PetRepository petRepository,
             UserRepository userRepository);
 
     // Прислать ответ от модерации, которая проверила юзера с ChatIdSender.

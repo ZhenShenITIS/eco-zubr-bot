@@ -6,6 +6,7 @@ import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.model.MessageTimer;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;

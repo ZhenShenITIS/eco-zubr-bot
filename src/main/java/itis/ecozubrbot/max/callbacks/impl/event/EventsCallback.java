@@ -4,9 +4,10 @@ import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.services.EventService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -19,9 +20,6 @@ import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.EditMessageQuery;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -39,14 +37,14 @@ public class EventsCallback implements Callback {
         List<List<Button>> layout = new ArrayList<>();
         int countOfIncrease = 0;
         int i;
-        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), events.size() - nextIndex);
+        int bounds =
+                nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), events.size() - nextIndex);
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Event event = events.get(i);
             row.add(new CallbackButton(
                     CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex,
-                    event.getTitle() + " | " + event.getPointsReward() + "/"
-                            + event.getExperienceReward()));
+                    event.getTitle() + " | " + event.getPointsReward() + "/" + event.getExperienceReward()));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
@@ -57,12 +55,10 @@ public class EventsCallback implements Callback {
 
         arrowRow.add(new CallbackButton(CallbackName.EMPTY.getCallbackName(), StringConstants.VOID.getValue()));
 
-        CallbackName forwardCallback = (i == events.size()) ?
-                CallbackName.EMPTY :
-                callbackName.EVENTS;
+        CallbackName forwardCallback = (i == events.size()) ? CallbackName.EMPTY : callbackName.EVENTS;
 
         arrowRow.add(new CallbackButton(
-                forwardCallback.getCallbackName()+ ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
+                forwardCallback.getCallbackName() + ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
         layout.add(arrowRow);
         List<Button> backButton = List.of(new CallbackButton(
                 CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));

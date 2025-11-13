@@ -8,9 +8,11 @@ import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
 import itis.ecozubrbot.repositories.impl.MapMessageTimerRepository;
+import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserEventRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
@@ -102,6 +104,7 @@ public class ModerationChallengeServiceImpl implements ModerationService {
             NewMessageBody isRejected,
             MaxClient client,
             UserEventRepository userEventRepository,
+            PetRepository PetRepository,
             UserRepository userRepository) {
         throw new RuntimeException("Not implemented");
     }

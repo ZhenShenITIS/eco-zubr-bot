@@ -23,8 +23,10 @@ public class Reward {
     private Long id;
 
     private String title;
+
     @Column(columnDefinition = "text")
     private String description;
+
     private Integer pointsCost;
     private String value;
     private Integer availableQuantity;

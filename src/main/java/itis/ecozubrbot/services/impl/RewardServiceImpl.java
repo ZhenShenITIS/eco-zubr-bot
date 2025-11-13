@@ -9,12 +9,11 @@ import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.jpa.RewardRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import itis.ecozubrbot.services.RewardService;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +23,9 @@ public class RewardServiceImpl implements RewardService {
 
     @Override
     public List<Reward> getRewardsSortedByPoints() {
-        return rewardRepository.findAll(Sort.by("pointsCost")).stream().filter(r -> r.getAvailableQuantity() > 0).toList();
+        return rewardRepository.findAll(Sort.by("pointsCost")).stream()
+                .filter(r -> r.getAvailableQuantity() > 0)
+                .toList();
     }
 
     @Override

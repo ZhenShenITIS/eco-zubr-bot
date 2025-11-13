@@ -13,9 +13,7 @@ public class EmptyCallback implements Callback {
     private final CallbackName callbackName = CallbackName.EMPTY;
 
     @Override
-    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
-
-    }
+    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
 
     @Override
     public CallbackName getCallback() {
