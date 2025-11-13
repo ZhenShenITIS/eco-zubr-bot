@@ -7,8 +7,8 @@ import java.util.Scanner;
 public class AdminControl extends Thread {
     EcoZubrBot ecoZubrBot;
 
-    public AdminControl(EcoZubrBot ecoZubrBot) {
-        this.ecoZubrBot = ecoZubrBot;
+    public AdminControl(EcoZubrBot bot) {
+        ecoZubrBot = bot;
     }
 
     @Override

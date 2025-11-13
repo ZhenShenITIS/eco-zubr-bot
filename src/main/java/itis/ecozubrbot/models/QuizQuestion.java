@@ -28,7 +28,7 @@ public class QuizQuestion {
 
     private Integer experienceReward;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
     private List<QuizAnswer> answers = new ArrayList<>();
 

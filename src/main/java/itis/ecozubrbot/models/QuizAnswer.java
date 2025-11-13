@@ -25,7 +25,7 @@ public class QuizAnswer {
 
     private boolean isCorrect;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id", nullable = false)
     private QuizQuestion question;
 
