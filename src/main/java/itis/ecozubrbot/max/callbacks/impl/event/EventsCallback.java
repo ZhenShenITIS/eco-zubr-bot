@@ -1,9 +1,11 @@
 package itis.ecozubrbot.max.callbacks.impl.event;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.services.EventService;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ru.max.botapi.queries.EditMessageQuery;
 public class EventsCallback implements Callback {
     private final CallbackName callbackName = CallbackName.EVENTS;
     private final EventService eventService;
+    private BasicFileMap basicFileMap;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
@@ -42,9 +45,16 @@ public class EventsCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Event event = events.get(i);
+            String text = event.getTitle() + " | " + event.getPointsReward() + "/" + event.getExperienceReward();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = event.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = event.getTitle().substring(0, indexFin) + "... | " + event.getPointsReward() + "/"
+                        + event.getExperienceReward();
+            }
             row.add(new CallbackButton(
-                    CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex,
-                    event.getTitle() + " | " + event.getPointsReward() + "/" + event.getExperienceReward()));
+                    CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
@@ -65,7 +75,8 @@ public class EventsCallback implements Callback {
         layout.add(backButton);
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.EVENTS.getValue())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.EVENTS))))
                 .build();
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());

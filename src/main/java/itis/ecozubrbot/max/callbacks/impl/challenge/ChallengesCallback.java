@@ -1,9 +1,11 @@
 package itis.ecozubrbot.max.callbacks.impl.challenge;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.services.ChallengeService;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class ChallengesCallback implements Callback {
 
     private ChallengeService challengeService;
 
+    private BasicFileMap basicFileMap;
+
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         int nextIndex = Integer.parseInt(update.getCallback().getPayload().split(":")[1]);
@@ -41,10 +45,18 @@ public class ChallengesCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Challenge challenge = challenges.get(i);
+            String text =
+                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/" + challenge.getExperienceReward();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = challenge.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = challenge.getTitle().substring(0, indexFin) + "... | " + challenge.getPointsReward() + "/"
+                        + challenge.getExperienceReward();
+            }
+
             row.add(new CallbackButton(
-                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex,
-                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/"
-                            + challenge.getExperienceReward()));
+                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
@@ -65,7 +77,8 @@ public class ChallengesCallback implements Callback {
         layout.add(backButton);
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CHALLENGES.getValue())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.CHALLENGES))))
                 .build();
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());
