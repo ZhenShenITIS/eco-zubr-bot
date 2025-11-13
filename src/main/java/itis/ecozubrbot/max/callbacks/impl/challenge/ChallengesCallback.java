@@ -1,9 +1,11 @@
 package itis.ecozubrbot.max.callbacks.impl.challenge;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.services.ChallengeService;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class ChallengesCallback implements Callback {
     private final CallbackName callbackName = CallbackName.CHALLENGES;
 
     private ChallengeService challengeService;
+
+    private BasicFileMap basicFileMap;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
@@ -65,7 +69,8 @@ public class ChallengesCallback implements Callback {
         layout.add(backButton);
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CHALLENGES.getValue())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.CHALLENGES))))
                 .build();
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());

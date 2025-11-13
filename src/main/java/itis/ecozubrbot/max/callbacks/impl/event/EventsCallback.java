@@ -1,9 +1,11 @@
 package itis.ecozubrbot.max.callbacks.impl.event;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.services.EventService;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ru.max.botapi.queries.EditMessageQuery;
 public class EventsCallback implements Callback {
     private final CallbackName callbackName = CallbackName.EVENTS;
     private final EventService eventService;
+    private BasicFileMap basicFileMap;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
@@ -65,7 +68,8 @@ public class EventsCallback implements Callback {
         layout.add(backButton);
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.EVENTS.getValue())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.EVENTS))))
                 .build();
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());

@@ -1,8 +1,10 @@
 package itis.ecozubrbot.max.callbacks.impl;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.services.ProfileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import ru.max.botapi.queries.SendMessageQuery;
 public class ProfileCallback implements Callback {
     private final CallbackName callbackName = CallbackName.PROFILE;
     private final ProfileService profileService;
+    private BasicFileMap basicFileMap;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
@@ -30,7 +33,8 @@ public class ProfileCallback implements Callback {
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(userProfileString)
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
-                        CallbackName.CHANGE_CITY.getCallbackName(), StringConstants.CHANGE_CITY_BUTTON.getValue()))))
+                        CallbackName.CHANGE_CITY.getCallbackName(), StringConstants.CHANGE_CITY_BUTTON.getValue())))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.PROFILE))))
                 .build();
 
         Long chatId = update.getMessage().getRecipient().getChatId();
