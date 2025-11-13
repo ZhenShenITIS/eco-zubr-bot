@@ -33,7 +33,8 @@ public class ProfileCallback implements Callback {
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(userProfileString)
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
-                        CallbackName.CHANGE_CITY.getCallbackName(), StringConstants.CHANGE_CITY_BUTTON.getValue())))
+                                CallbackName.CHANGE_CITY.getCallbackName(),
+                                StringConstants.CHANGE_CITY_BUTTON.getValue())))
                         .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.PROFILE))))
                 .build();
 

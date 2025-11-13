@@ -44,9 +44,18 @@ public class ShopCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Reward reward = rewards.get(i);
+
+            String text = reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = reward.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = reward.getTitle().substring(0, indexFin) + "... | " + reward.getPointsCost() + "/"
+                        + reward.getAvailableQuantity();
+            }
+
             row.add(new CallbackButton(
-                    CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex,
-                    reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity()));
+                    CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();

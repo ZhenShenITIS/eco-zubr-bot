@@ -45,10 +45,18 @@ public class ChallengesCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Challenge challenge = challenges.get(i);
+            String text =
+                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/" + challenge.getExperienceReward();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = challenge.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = challenge.getTitle().substring(0, indexFin) + "... | " + challenge.getPointsReward() + "/"
+                        + challenge.getExperienceReward();
+            }
+
             row.add(new CallbackButton(
-                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex,
-                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/"
-                            + challenge.getExperienceReward()));
+                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();

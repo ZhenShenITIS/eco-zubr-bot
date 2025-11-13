@@ -31,7 +31,12 @@ public class LeaderboardCallback implements Callback {
         String topForUser = leaderboardService.getLeaderboardForUser(
                 update.getCallback().getUser().getUserId());
 
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(topForUser).withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()))).with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.LEADERBOARD)))).build();
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(topForUser)
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
+                                CallbackName.BACK_TO_MENU.getCallbackName(),
+                                StringConstants.BACK_TO_MENU_BUTTON.getValue())))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.LEADERBOARD))))
+                .build();
 
         Long chatId = update.getMessage().getRecipient().getChatId();
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);

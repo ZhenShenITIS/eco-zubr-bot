@@ -45,9 +45,16 @@ public class EventsCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Event event = events.get(i);
+            String text = event.getTitle() + " | " + event.getPointsReward() + "/" + event.getExperienceReward();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = event.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = event.getTitle().substring(0, indexFin) + "... | " + event.getPointsReward() + "/"
+                        + event.getExperienceReward();
+            }
             row.add(new CallbackButton(
-                    CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex,
-                    event.getTitle() + " | " + event.getPointsReward() + "/" + event.getExperienceReward()));
+                    CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
