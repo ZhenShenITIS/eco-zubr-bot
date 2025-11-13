@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum CallbackName {
     TEST("test"),
     PET("pet"),
+    EMPTY("empty"),
     CHALLENGES("challenges"),
     SHOP("shop"),
     PROFILE("profile"),
@@ -15,10 +16,15 @@ public enum CallbackName {
     EVENTS("events"),
     CARESS("caress"),
     BACK_TO_MENU("back_to_menu"),
+    REWARD_CARD("reward_card"),
+    REWARD_PURCHASE("reward_purchase"),
+    EVENT_CARD("event_card"),
+    EVENT_DONE("event_done"),
     CHALLENGE_CARD("challenge_card"),
     CHALLENGE_DONE("challenge_done"),
     CHANGE_CITY("change_city"),
-    ACCEPT_FOR_SENDING_PROOF_OF_CHALLENGE("accept_for_sending_proof_of_challenge"),
+    EVENT_ACCEPT_FOR_SENDING_PROOF("event_accept_for_sending_proof"),
+    CHALLENGE_ACCEPT_FOR_SENDING_PROOF("challenge_accept_for_sending_proof"),
     EDIT_PROOF_OF_CHALLENGE("edit_proof_of_challenge"),
     BACK_TO_PET_START("back_to_pet_start");
 

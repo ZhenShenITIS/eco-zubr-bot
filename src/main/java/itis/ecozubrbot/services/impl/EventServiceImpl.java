@@ -3,12 +3,15 @@ package itis.ecozubrbot.services.impl;
 import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
 import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.models.Event;
+import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.jpa.EventRepository;
+import itis.ecozubrbot.repositories.jpa.UserRepository;
 import itis.ecozubrbot.services.EventService;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +19,23 @@ import org.springframework.stereotype.Service;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public List<Challenge> getEvents() {
-        return List.of();
+    public List<Event> getEvents() {
+        return eventRepository.findAll();
+    }
+
+    @Override
+    public Event getById(Long eventId) {
+        return eventRepository.findById(eventId).orElse(null);
+    }
+
+    @Override
+    public List<Event> getEventsForUserSortedByPoints(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        String city = (user == null) ? "" : user.getCity();
+        return eventRepository.findAllByCity(city, Sort.by("pointsReward").descending().and(Sort.by("experienceReward")).descending());
     }
 
     @Override

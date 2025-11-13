@@ -6,5 +6,6 @@ public enum StateName {
     UPLOAD_IMAGE,
     TEST,
     WAITING_PROOF_OF_CHALLENGE,
+    WAITING_PROOF_OF_EVENT,
     ADD_CONTENT
 }

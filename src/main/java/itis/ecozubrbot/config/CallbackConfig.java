@@ -4,12 +4,16 @@ import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.max.callbacks.impl.BackToMenuCallback;
 import itis.ecozubrbot.max.callbacks.impl.BackToPetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.CaressCallback;
-import itis.ecozubrbot.max.callbacks.impl.EventsCallback;
+import itis.ecozubrbot.max.callbacks.impl.EmptyCallback;
+import itis.ecozubrbot.max.callbacks.impl.event.EventAcceptProofForSendingCallback;
+import itis.ecozubrbot.max.callbacks.impl.event.EventCardCallback;
+import itis.ecozubrbot.max.callbacks.impl.event.EventDoneCallback;
+import itis.ecozubrbot.max.callbacks.impl.event.EventsCallback;
 import itis.ecozubrbot.max.callbacks.impl.PetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.ProfileCallback;
-import itis.ecozubrbot.max.callbacks.impl.ShopCallback;
+import itis.ecozubrbot.max.callbacks.impl.shop.ShopCallback;
 import itis.ecozubrbot.max.callbacks.impl.TestCallback;
-import itis.ecozubrbot.max.callbacks.impl.challenge.AcceptProofForSendingCallback;
+import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengeAcceptProofForSendingCallback;
 import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengeCardCallback;
 import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengeDoneCallback;
 import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengesCallback;
@@ -32,8 +36,12 @@ public class CallbackConfig {
     private BackToPetStartCallback backToPetStartCallback;
     private CaressCallback caressCallback;
     private ChallengeCardCallback challengeCardCallback;
-    private AcceptProofForSendingCallback acceptProofForSendingCallback;
+    private ChallengeAcceptProofForSendingCallback challengeAcceptProofForSendingCallback;
     private ChallengeDoneCallback challengeDoneCallback;
+    private EmptyCallback emptyCallback;
+    private EventAcceptProofForSendingCallback eventAcceptProofForSendingCallback;
+    private EventCardCallback eventCardCallback;
+    private EventDoneCallback eventDoneCallback;
     private List<Callback> callbackList;
 
     @Bean
@@ -48,8 +56,12 @@ public class CallbackConfig {
         callbackList.add(backToPetStartCallback);
         callbackList.add(caressCallback);
         callbackList.add(challengeCardCallback);
-        callbackList.add(acceptProofForSendingCallback);
+        callbackList.add(challengeAcceptProofForSendingCallback);
         callbackList.add(challengeDoneCallback);
+        callbackList.add(emptyCallback);
+        callbackList.add(eventAcceptProofForSendingCallback);
+        callbackList.add(eventCardCallback);
+        callbackList.add(eventDoneCallback);
         return new CallbackContainer(callbackList);
     }
 }

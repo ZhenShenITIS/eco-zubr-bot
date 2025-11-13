@@ -36,4 +36,9 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserEvent> userEvents = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return title + "\n\n" + description + "\n\nНаграда в очках и опыте:\n" + pointsReward + "/" + experienceReward;
+    }
 }
