@@ -2,6 +2,7 @@ package itis.ecozubrbot.max.states.impl;
 
 import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
+import itis.ecozubrbot.max.commands.impl.MenuCommand;
 import itis.ecozubrbot.max.states.State;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.StateRepository;
@@ -28,6 +29,8 @@ public class GeolocationState implements State {
     private UserService userService;
     private GeoLocationService geoLocationService;
     private StateRepository stateRepository;
+
+    private MenuCommand menuCommand;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
@@ -62,6 +65,8 @@ public class GeolocationState implements State {
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
         try {
             query.enqueue();
+            MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(update.getMessage(), update.getTimestamp());
+            menuCommand.handleCommand(messageCreatedUpdate, client);
         } catch (ClientException e) {
             throw new RuntimeException(e);
         }

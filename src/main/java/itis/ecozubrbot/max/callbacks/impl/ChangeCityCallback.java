@@ -1,9 +1,10 @@
 package itis.ecozubrbot.max.callbacks.impl;
 
 import itis.ecozubrbot.constants.CallbackName;
+import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.services.ProfileService;
+import itis.ecozubrbot.repositories.StateRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -11,32 +12,29 @@ import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
-import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
+import ru.max.botapi.model.RequestGeoLocationButton;
 import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class ProfileCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.PROFILE;
-    private final ProfileService profileService;
+public class ChangeCityCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.CHANGE_CITY;
+    private StateRepository stateRepository;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
 
-        String userProfileString =
-                profileService.getProfileForUser(update.getCallback().getUser().getUserId());
-
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(userProfileString)
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
-                        CallbackName.CHANGE_CITY.getCallbackName(), StringConstants.CHANGE_CITY_BUTTON.getValue()))))
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CHANGE_CITY_INFO.getValue())
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(
+                        new RequestGeoLocationButton(StringConstants.GEOLOCATION_BUTTON.getValue()))))
                 .build();
-
         Long chatId = update.getMessage().getRecipient().getChatId();
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
         try {
             query.enqueue();
+            stateRepository.put(update.getCallback().getUser().getUserId(), StateName.GEOLOCATION);
         } catch (ClientException e) {
             throw new RuntimeException(e);
         }
