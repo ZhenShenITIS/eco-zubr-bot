@@ -16,6 +16,7 @@ public class ContentServiceImpl implements ContentService {
     private final ChallengeService challengeService;
     private final EventService eventService;
     private final RewardService rewardService;
+    private final QuizServiceImpl quizService;
 
     @Override
     public void add(String jsonChallenge, String photoToken) throws IncorrectJsonStringChallengeException {
@@ -27,6 +28,8 @@ public class ContentServiceImpl implements ContentService {
                 eventService.addEvent(jsonChallenge, photoToken);
             } else if (jsonObject.has("points_cost")) {
                 rewardService.addReward(jsonChallenge, photoToken);
+            } else if (jsonObject.has("text_after_answer")) {
+                quizService.addQuiz(jsonChallenge);
             } else {
                 challengeService.addChallenge(jsonChallenge, photoToken);
             }
