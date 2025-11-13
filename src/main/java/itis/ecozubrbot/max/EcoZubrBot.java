@@ -3,6 +3,7 @@ package itis.ecozubrbot.max;
 import itis.ecozubrbot.max.containers.StateContainer;
 import itis.ecozubrbot.max.handlers.BotStartedHandler;
 import itis.ecozubrbot.max.states.impl.TestState;
+import itis.ecozubrbot.max.states.newsletter_states.NewsletterCallback;
 import itis.ecozubrbot.repositories.StateRepository;
 import org.springframework.stereotype.Component;
 import ru.max.bot.annotations.UpdateHandler;
@@ -42,10 +43,14 @@ public class EcoZubrBot extends LongPollingBot {
 
     @UpdateHandler
     public void onMessageCallback(MessageCallbackUpdate update) {
-        Thread.startVirtualThread(() -> stateContainer
-                .getStateInstance(
-                        stateRepository.get(update.getCallback().getUser().getUserId()))
-                .handleMessageCallback(update, getClient()));
+        if (update.getCallback().getPayload().split(":")[0].contains("newsletter")) {
+            Thread.startVirtualThread(() -> NewsletterCallback.handlerCallback(update, getClient()));
+        } else {
+            Thread.startVirtualThread(() -> stateContainer
+                    .getStateInstance(
+                            stateRepository.get(update.getCallback().getUser().getUserId()))
+                    .handleMessageCallback(update, getClient()));
+        }
     }
 
     @UpdateHandler

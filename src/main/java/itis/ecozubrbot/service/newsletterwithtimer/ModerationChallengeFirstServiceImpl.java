@@ -35,8 +35,10 @@ public class ModerationChallengeFirstServiceImpl {
                 .toList();
         for (User user : users) {
             NewMessageBody messageBody;
-            Button buttonAccept = new CallbackButton(idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
-            Button buttonReject = new CallbackButton(idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
+            Button buttonAccept = new CallbackButton(
+                    "newsletter" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
+            Button buttonReject = new CallbackButton(
+                    "newsletter" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
 
             List<Button> buttons = Arrays.asList(buttonAccept, buttonReject);
             messageBody = NewMessageBodyBuilder.ofText("Модерация на следующий челендж: "
@@ -73,10 +75,10 @@ public class ModerationChallengeFirstServiceImpl {
     public void cameAnswer(MessageCallbackUpdate update) {
         String payload = update.getCallback().getPayload();
 
-        long idNewsLetter = Long.parseLong(payload.split(":")[0]);
-        long chatIdModerator = Long.parseLong(payload.split(":")[1]);
+        long idNewsLetter = Long.parseLong(payload.split(":")[1]);
+        long chatIdModerator = Long.parseLong(payload.split(":")[2]);
         NewsLetterTimerAnswer answer =
-                payload.split(":")[2].contains("A") ? NewsLetterTimerAnswer.APPROVED : NewsLetterTimerAnswer.REJECTED;
+                payload.split(":")[3].contains("A") ? NewsLetterTimerAnswer.APPROVED : NewsLetterTimerAnswer.REJECTED;
 
         moderationChallengeService.cameAnswer(idNewsLetter, chatIdModerator, answer);
     }
