@@ -30,7 +30,8 @@ public class ChallengeAcceptProofForSendingCallback implements Callback {
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long userId = update.getCallback().getUser().getUserId();
         moderationChallengeFirstService.createModeration(
-                userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)));
+                userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)), client);
+
         userChallengeOnModerationRepository.remove(userId);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.PROOF_GET_SUCCESS.getValue())
                 .build();
@@ -42,7 +43,6 @@ public class ChallengeAcceptProofForSendingCallback implements Callback {
             throw new RuntimeException(e);
         }
         stateRepository.put(userId, StateName.DEFAULT);
-
     }
 
     @Override

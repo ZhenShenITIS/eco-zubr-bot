@@ -6,10 +6,9 @@ import itis.ecozubrbot.max.states.impl.DefaultState;
 import itis.ecozubrbot.max.states.impl.GeolocationState;
 import itis.ecozubrbot.max.states.impl.ImageUploadState;
 import itis.ecozubrbot.max.states.impl.TestState;
-import java.util.List;
-
 import itis.ecozubrbot.max.states.impl.WaitingProofOfChallengeState;
 import itis.ecozubrbot.max.states.impl.WaitingProofOfEventState;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

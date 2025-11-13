@@ -4,10 +4,9 @@ import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.repositories.UserEventOnModerationRepository;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationEventFirstService;
 import itis.ecozubrbot.services.UserEventService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class EventAcceptProofForSendingCallback implements Callback {
     private final UserEventService userEventService;
     private final UserEventOnModerationRepository userEventOnModerationRepository;
     private StateRepository stateRepository;
-    private ModerationChallengeFirstService moderationChallengeFirstService;
+    private ModerationEventFirstService moderationEventFirstService;
 
     @Override
     public CallbackName getCallback() {
@@ -35,8 +34,8 @@ public class EventAcceptProofForSendingCallback implements Callback {
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long userId = update.getCallback().getUser().getUserId();
-        // TODO Дописать когда будет готов сервис
-        //moderationChallengeFirstService.createModeration(userEventService.getById(userEventOnModerationRepository.getUserEventId(userId)));
+        moderationEventFirstService.createModeration(
+                userEventService.getById(userEventOnModerationRepository.getUserEventId(userId)), client);
         userEventOnModerationRepository.remove(userId);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.PROOF_GET_SUCCESS.getValue())
                 .build();

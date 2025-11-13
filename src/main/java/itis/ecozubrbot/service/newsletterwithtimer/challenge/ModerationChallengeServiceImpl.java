@@ -1,15 +1,22 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.service.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
+import itis.ecozubrbot.repositories.impl.MapMessageTimerRepository;
+import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
+import itis.ecozubrbot.repositories.jpa.UserEventRepository;
+import itis.ecozubrbot.repositories.jpa.UserRepository;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
+import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.model.NewMessageBody;
 
 record NewsLetterContext(
@@ -21,8 +28,10 @@ public class ModerationChallengeServiceImpl implements ModerationService {
     NewsletterManager newsletterManager;
     MessageTimerRepository messageTimerRepository;
     UserChallengeRepository userChallengeRepository;
+    UserRepository userRepository;
 
-    private final int COUNT_MODERATORS = 5;
+    // TODO: ИЗМЕНИТ НА 2
+    private final int COUNT_MODERATORS = 1;
     private final int COUNT_CHAT_SEC = 60 * 60;
     private final int COUNT_MAX_TIME_WORK_SEC = 24 * 60 * 60;
 
@@ -46,6 +55,13 @@ public class ModerationChallengeServiceImpl implements ModerationService {
 
         // Обновить бд
         userChallengeRepository.save(userChallenge);
+        User user = userChallenge.getUser();
+        Integer userPoints = user.getPoints();
+        if (userPoints == null) {
+            userPoints = 0;
+        }
+        user.setPoints(userPoints + userChallenge.getChallenge().getPointsReward());
+        userRepository.save(user);
     }
 
     private boolean checkIsApproved(long countApproved, long countRejected) {
@@ -53,12 +69,20 @@ public class ModerationChallengeServiceImpl implements ModerationService {
     }
 
     @Override
-    public void initializeModeration(
+    public void initializeChallengeModeration(
             long idNewsLetter,
             long chatIdSender,
             Iterator<ChatIdAndMessageBody> iterator,
             NewMessageBody isApproved,
-            NewMessageBody isRejected) {
+            NewMessageBody isRejected,
+            MaxClient client,
+            UserChallengeRepository userChallengeRepository,
+            UserRepository userRepository) {
+
+        newsletterManager = new NewsletterManager(client);
+        messageTimerRepository = new MapMessageTimerRepository();
+        this.userChallengeRepository = userChallengeRepository;
+        this.userRepository = userRepository;
         // Создать менеджер управление рассылкой
         ModerationSendingManager manager =
                 new ModerationSendingManager(newsletterManager, messageTimerRepository, this);
@@ -69,6 +93,20 @@ public class ModerationChallengeServiceImpl implements ModerationService {
         // Создать поток для менеджера
         Thread.startVirtualThread(() -> manager.activateNewsletterModeration(
                 iterator, idNewsLetter, COUNT_MODERATORS, COUNT_CHAT_SEC, COUNT_MAX_TIME_WORK_SEC));
+    }
+
+    @Override
+    public void initializeEventModeration(
+            long idNewsLetter,
+            long ChatIdSender,
+            Iterator<ChatIdAndMessageBody> iterator,
+            NewMessageBody isApproved,
+            NewMessageBody isRejected,
+            MaxClient client,
+            UserEventRepository userEventRepository,
+            PetRepository PetRepository,
+            UserRepository userRepository) {
+        throw new RuntimeException("Not implemented");
     }
 
     @Override

@@ -1,7 +1,6 @@
 package itis.ecozubrbot.services;
 
 import itis.ecozubrbot.constants.TaskStatus;
-import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.models.UserEvent;
 
 public interface UserEventService {

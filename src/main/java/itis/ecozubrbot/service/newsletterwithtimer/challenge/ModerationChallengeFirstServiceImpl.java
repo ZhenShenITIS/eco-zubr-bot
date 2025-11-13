@@ -1,17 +1,24 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.service.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
+import itis.ecozubrbot.constants.TaskStatus;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
+import itis.ecozubrbot.newsletter.NewsletterManager;
+import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
+import ru.max.botapi.client.MaxClient;
+import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.*;
+import ru.max.botapi.queries.DeleteMessageQuery;
 
 @Component
 @AllArgsConstructor
@@ -19,8 +26,29 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
 
     UserRepository userRepository;
     ModerationChallengeServiceImpl moderationChallengeService;
+    UserChallengeRepository userChallengeRepository;
 
-    public void createModeration(UserChallenge userChallenge) {
+    public void createModeration(UserChallenge userChallenge, MaxClient client) {
+
+        List<UserChallenge> list = userChallengeRepository.findAll();
+        list.sort(Comparator.comparing(UserChallenge::getId).reversed());
+        for (UserChallenge userChallenge1 : list) {
+            if (userChallenge1.getUser().getId().equals(userChallenge.getUser().getId())) {
+                if (userChallenge1
+                        .getChallenge()
+                        .getId()
+                        .equals(userChallenge.getChallenge().getId())) {
+                    if (userChallenge1.getStatus() == TaskStatus.ACCEPTED) {
+                        NewMessageBody messageBody = new NewMessageBody("ВЫ уже выполнили данный челендж", null, null);
+                        new NewsletterManager(client)
+                                .sendMessage(
+                                        messageBody, userChallenge.getUser().getChatId());
+                        return;
+                    }
+                }
+            }
+        }
+
         long idNewsLetter = userChallenge.getId();
         long chatIdSender = userChallenge.getUser().getChatId();
 
@@ -28,11 +56,14 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
         List<ChatIdAndMessageBody> chatIdAndMessageBodies = new ArrayList<>();
         List<User> users = userRepository.findAll().stream()
                 .filter(u -> !u.getChatId().equals(chatIdSender))
+                .sorted(Comparator.comparing(User::getId).reversed())
                 .toList();
         for (User user : users) {
             NewMessageBody messageBody;
-            Button buttonAccept = new CallbackButton(idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
-            Button buttonReject = new CallbackButton(idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
+            Button buttonAccept = new CallbackButton(
+                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
+            Button buttonReject = new CallbackButton(
+                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
 
             List<Button> buttons = Arrays.asList(buttonAccept, buttonReject);
             messageBody = NewMessageBodyBuilder.ofText("Модерация на следующий челендж: "
@@ -62,18 +93,33 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
                         userChallenge.getChallenge().getTitle()),
                 null,
                 null);
-        moderationChallengeService.initializeModeration(
-                idNewsLetter, chatIdSender, iterator, approvedMessage, rejectedMessage);
+        moderationChallengeService.initializeChallengeModeration(
+                idNewsLetter,
+                chatIdSender,
+                iterator,
+                approvedMessage,
+                rejectedMessage,
+                client,
+                userChallengeRepository,
+                userRepository);
     }
 
-    public void cameAnswer(MessageCallbackUpdate update) {
+    public void cameAnswer(MessageCallbackUpdate update, MaxClient client) {
         String payload = update.getCallback().getPayload();
 
-        long idNewsLetter = Long.parseLong(payload.split(":")[0]);
-        long chatIdModerator = Long.parseLong(payload.split(":")[1]);
+        long idNewsLetter = Long.parseLong(payload.split(":")[1]);
+        long chatIdModerator = Long.parseLong(payload.split(":")[2]);
         NewsLetterTimerAnswer answer =
-                payload.split(":")[2].contains("A") ? NewsLetterTimerAnswer.APPROVED : NewsLetterTimerAnswer.REJECTED;
+                payload.split(":")[3].contains("A") ? NewsLetterTimerAnswer.APPROVED : NewsLetterTimerAnswer.REJECTED;
 
         moderationChallengeService.cameAnswer(idNewsLetter, chatIdModerator, answer);
+
+        DeleteMessageQuery query =
+                new DeleteMessageQuery(client, update.getMessage().getBody().getMid());
+        try {
+            query.enqueue();
+        } catch (ClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

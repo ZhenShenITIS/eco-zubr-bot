@@ -3,7 +3,6 @@ package itis.ecozubrbot.max.callbacks.impl.event;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.services.EventService;
 import lombok.AllArgsConstructor;

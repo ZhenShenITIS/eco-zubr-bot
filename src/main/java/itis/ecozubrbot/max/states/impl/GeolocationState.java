@@ -65,7 +65,8 @@ public class GeolocationState implements State {
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
         try {
             query.enqueue();
-            MessageCreatedUpdate messageCreatedUpdate = new MessageCreatedUpdate(update.getMessage(), update.getTimestamp());
+            MessageCreatedUpdate messageCreatedUpdate =
+                    new MessageCreatedUpdate(update.getMessage(), update.getTimestamp());
             menuCommand.handleCommand(messageCreatedUpdate, client);
         } catch (ClientException e) {
             throw new RuntimeException(e);

@@ -1,9 +1,7 @@
 package itis.ecozubrbot.services;
 
 import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
-import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.models.Event;
-
 import java.util.List;
 
 public interface EventService {

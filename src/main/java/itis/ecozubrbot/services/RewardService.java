@@ -3,9 +3,7 @@ package itis.ecozubrbot.services;
 import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
 import itis.ecozubrbot.exceptions.NotEnoughPointsException;
 import itis.ecozubrbot.exceptions.RewardSoldOutException;
-import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.models.Reward;
-
 import java.util.List;
 
 public interface RewardService {

@@ -36,7 +36,8 @@ public class ChallengesCallback implements Callback {
         List<List<Button>> layout = new ArrayList<>();
         int countOfIncrease = 0;
         int i;
-        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), challenges.size() - nextIndex);
+        int bounds = nextIndex
+                + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), challenges.size() - nextIndex);
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Challenge challenge = challenges.get(i);
@@ -54,12 +55,10 @@ public class ChallengesCallback implements Callback {
 
         arrowRow.add(new CallbackButton(CallbackName.EMPTY.getCallbackName(), StringConstants.VOID.getValue()));
 
-        CallbackName forwardCallback = (i == challenges.size()) ?
-                CallbackName.EMPTY :
-                callbackName.CHALLENGES;
+        CallbackName forwardCallback = (i == challenges.size()) ? CallbackName.EMPTY : callbackName.CHALLENGES;
 
         arrowRow.add(new CallbackButton(
-                forwardCallback.getCallbackName()+ ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
+                forwardCallback.getCallbackName() + ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
         layout.add(arrowRow);
         List<Button> backButton = List.of(new CallbackButton(
                 CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));

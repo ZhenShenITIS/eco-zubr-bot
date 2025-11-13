@@ -1,7 +1,6 @@
 package itis.ecozubrbot.services.impl;
 
 import itis.ecozubrbot.exceptions.IncorrectJsonStringChallengeException;
-import itis.ecozubrbot.models.Challenge;
 import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.repositories.jpa.EventRepository;
@@ -35,7 +34,12 @@ public class EventServiceImpl implements EventService {
     public List<Event> getEventsForUserSortedByPoints(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         String city = (user == null) ? "" : user.getCity();
-        return eventRepository.findAllByCity(city, Sort.by("pointsReward").descending().and(Sort.by("experienceReward")).descending());
+        return eventRepository.findAllByCity(
+                city,
+                Sort.by("pointsReward")
+                        .descending()
+                        .and(Sort.by("experienceReward"))
+                        .descending());
     }
 
     @Override

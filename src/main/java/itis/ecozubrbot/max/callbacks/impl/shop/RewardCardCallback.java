@@ -3,7 +3,6 @@ package itis.ecozubrbot.max.callbacks.impl.shop;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Event;
 import itis.ecozubrbot.models.Reward;
 import itis.ecozubrbot.services.RewardService;
 import lombok.AllArgsConstructor;

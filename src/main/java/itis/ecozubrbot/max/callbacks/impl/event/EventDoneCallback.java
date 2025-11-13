@@ -28,6 +28,7 @@ public class EventDoneCallback implements Callback {
     private final EventService eventService;
     private final UserEventOnModerationRepository userEventOnModerationRepository;
     private final StateRepository stateRepository;
+
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.WAITING_OF_PROOFS.getValue())
