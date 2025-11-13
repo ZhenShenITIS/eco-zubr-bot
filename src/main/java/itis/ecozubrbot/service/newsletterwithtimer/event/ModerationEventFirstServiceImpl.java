@@ -42,7 +42,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
                         .getId()
                         .equals(userEvent.getEvent().getId())) {
                     if (userChallenge1.getStatus() == TaskStatus.ACCEPTED) {
-                        NewMessageBody messageBody = new NewMessageBody("ВЫ уже выполнили данный челендж", null, null);
+                        NewMessageBody messageBody = new NewMessageBody("Вы уже выполнили данное событие", null, null);
                         new NewsletterManager(client)
                                 .sendMessage(messageBody, userEvent.getUser().getChatId());
                         return;
@@ -68,7 +68,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
                     "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
 
             List<Button> buttons = Arrays.asList(buttonAccept, buttonReject);
-            messageBody = NewMessageBodyBuilder.ofText("Модерация на следующий челендж: "
+            messageBody = NewMessageBodyBuilder.ofText("Модерация на следующее событие: "
                             + userEvent.getEvent().getTitle() + ": " + userEvent.getProofDescription())
                     .withAttachments(AttachmentsBuilder.inlineKeyboard(
                                     InlineKeyboardBuilder.singleRow(buttonAccept, buttonReject))
@@ -83,7 +83,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
         // здесь сообщение isApproved
         NewMessageBody approvedMessage = new NewMessageBody(
                 String.format(
-                        "Модерация одобрила выполнение челенджа %s",
+                        "Модерация одобрила выполнение события %s",
                         userEvent.getEvent().getTitle()),
                 null,
                 null);
@@ -91,7 +91,7 @@ public class ModerationEventFirstServiceImpl implements ModerationEventFirstServ
         // здесь сообщение isRejected
         NewMessageBody rejectedMessage = new NewMessageBody(
                 String.format(
-                        "Модерация отклонила выполнение челенджа %s",
+                        "Модерация отклонила выполнение события %s",
                         userEvent.getEvent().getTitle()),
                 null,
                 null);
