@@ -10,6 +10,7 @@ public class UserMapper {
                 .chatId(chatId)
                 .firstName(user.getFirstName())
                 .role(UserRole.USER)
+                .points(0)
                 .build();
     }
 }
