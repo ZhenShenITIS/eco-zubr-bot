@@ -1,9 +1,11 @@
 package itis.ecozubrbot.max.callbacks.impl.shop;
 
+import itis.ecozubrbot.constants.BasicFile;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
+import itis.ecozubrbot.max.containers.BasicFileMap;
 import itis.ecozubrbot.models.Reward;
 import itis.ecozubrbot.services.RewardService;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ru.max.botapi.queries.EditMessageQuery;
 public class ShopCallback implements Callback {
     private final CallbackName callbackName = CallbackName.SHOP;
     private final RewardService rewardService;
+    private BasicFileMap basicFileMap;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
@@ -41,9 +44,18 @@ public class ShopCallback implements Callback {
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
             Reward reward = rewards.get(i);
+
+            String text = reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity();
+            int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
+            if (text.length() > maxLen) {
+                int indexFin = reward.getTitle().length() - 4 - (text.length() - maxLen);
+                indexFin = Math.max(indexFin, 0);
+                text = reward.getTitle().substring(0, indexFin) + "... | " + reward.getPointsCost() + "/"
+                        + reward.getAvailableQuantity();
+            }
+
             row.add(new CallbackButton(
-                    CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex,
-                    reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity()));
+                    CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex, text));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
@@ -64,7 +76,8 @@ public class ShopCallback implements Callback {
         layout.add(backButton);
 
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.SHOP.getValue())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout))
+                        .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.SHOP))))
                 .build();
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());
