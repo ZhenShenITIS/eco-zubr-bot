@@ -17,6 +17,7 @@ public enum StringConstants {
     BACK_BUTTON("Назад"),
     PROFILE_BUTTON("Профиль"),
     CHANGE_CITY_BUTTON("Сменить город"),
+    CHANGE_CITY_INFO("Чтобы сменить город отправь свою геолокацию"),
     LEADERBOARD_BUTTON("Рейтинг"),
     GEOLOCATION_BUTTON("Геолокация"),
     GEOLOCATION_UPDATE_SUCCESS("Геолокация успешно задана!"),
