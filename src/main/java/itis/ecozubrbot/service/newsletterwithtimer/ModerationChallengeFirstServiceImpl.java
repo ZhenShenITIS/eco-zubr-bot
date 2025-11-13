@@ -6,7 +6,6 @@ import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import java.util.*;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -16,7 +15,7 @@ import ru.max.botapi.model.*;
 
 @Component
 @AllArgsConstructor
-public class ModerationChallengeFirstServiceImpl implements ModerationChallengeFirstService{
+public class ModerationChallengeFirstServiceImpl implements ModerationChallengeFirstService {
 
     UserRepository userRepository;
     ModerationChallengeServiceImpl moderationChallengeService;

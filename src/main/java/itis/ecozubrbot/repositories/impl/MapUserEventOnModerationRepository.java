@@ -15,7 +15,6 @@ public class MapUserEventOnModerationRepository implements UserEventOnModeration
         map.put(userId, userEventId);
     }
 
-
     @Override
     public Long getUserEventId(Long userId) {
         return map.get(userId);
