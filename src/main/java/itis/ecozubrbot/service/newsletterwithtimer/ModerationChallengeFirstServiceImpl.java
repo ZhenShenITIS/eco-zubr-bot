@@ -6,27 +6,24 @@ import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import java.util.*;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.model.*;
 
-public class ModerationChallengeFirstServiceImpl {
+@Component
+@AllArgsConstructor
+public class ModerationChallengeFirstServiceImpl implements ModerationChallengeFirstService{
 
     UserRepository userRepository;
     ModerationChallengeServiceImpl moderationChallengeService;
 
-    public ModerationChallengeFirstServiceImpl(
-            UserRepository userRepository, ModerationChallengeServiceImpl moderationChallengeService) {
-        this.userRepository = userRepository;
-        this.moderationChallengeService = moderationChallengeService;
-    }
-
     public void createModeration(UserChallenge userChallenge) {
         long idNewsLetter = userChallenge.getId();
-        long chatIdSender = Objects.requireNonNull(
-                        userRepository.findById(idNewsLetter).orElse(null))
-                .getChatId();
+        long chatIdSender = userChallenge.getUser().getChatId();
 
         // Здесь будет итератор
         List<ChatIdAndMessageBody> chatIdAndMessageBodies = new ArrayList<>();

@@ -4,4 +4,6 @@ public interface UserChallengeOnModerationRepository {
     void put(Long userId, Long userChallengeId);
 
     Long getUserChallengeId(Long userId);
+
+    void remove(Long userId);
 }
