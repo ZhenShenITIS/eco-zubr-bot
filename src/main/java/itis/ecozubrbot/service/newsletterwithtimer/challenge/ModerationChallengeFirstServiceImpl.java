@@ -1,4 +1,4 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.service.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
@@ -8,6 +8,7 @@ import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
+import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,9 @@ import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
+import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.*;
+import ru.max.botapi.queries.DeleteMessageQuery;
 
 @Component
 @AllArgsConstructor
@@ -28,6 +31,7 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
     public void createModeration(UserChallenge userChallenge, MaxClient client) {
 
         List<UserChallenge> list = userChallengeRepository.findAll();
+        list.sort(Comparator.comparing(UserChallenge::getId).reversed());
         for (UserChallenge userChallenge1 : list) {
             if (userChallenge1.getUser().getId().equals(userChallenge.getUser().getId())) {
                 if (userChallenge1
@@ -52,6 +56,7 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
         List<ChatIdAndMessageBody> chatIdAndMessageBodies = new ArrayList<>();
         List<User> users = userRepository.findAll().stream()
                 .filter(u -> !u.getChatId().equals(chatIdSender))
+                .sorted(Comparator.comparing(User::getId).reversed())
                 .toList();
         for (User user : users) {
             NewMessageBody messageBody;
@@ -88,7 +93,7 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
                         userChallenge.getChallenge().getTitle()),
                 null,
                 null);
-        moderationChallengeService.initializeModeration(
+        moderationChallengeService.initializeChallengeModeration(
                 idNewsLetter,
                 chatIdSender,
                 iterator,
@@ -99,7 +104,7 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
                 userRepository);
     }
 
-    public void cameAnswer(MessageCallbackUpdate update) {
+    public void cameAnswer(MessageCallbackUpdate update, MaxClient client) {
         String payload = update.getCallback().getPayload();
 
         long idNewsLetter = Long.parseLong(payload.split(":")[1]);
@@ -108,5 +113,13 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
                 payload.split(":")[3].contains("A") ? NewsLetterTimerAnswer.APPROVED : NewsLetterTimerAnswer.REJECTED;
 
         moderationChallengeService.cameAnswer(idNewsLetter, chatIdModerator, answer);
+
+        DeleteMessageQuery query =
+                new DeleteMessageQuery(client, update.getMessage().getBody().getMid());
+        try {
+            query.enqueue();
+        } catch (ClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

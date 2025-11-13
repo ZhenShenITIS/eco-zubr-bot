@@ -1,4 +1,4 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.service.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.NewsletterTimerStatus;

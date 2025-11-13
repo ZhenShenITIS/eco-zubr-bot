@@ -9,5 +9,5 @@ public interface ModerationChallengeFirstService {
     void createModeration(UserChallenge userChallenge, MaxClient client);
 
     // Получить ответ от модерации
-    void cameAnswer(MessageCallbackUpdate update);
+    void cameAnswer(MessageCallbackUpdate update, MaxClient client);
 }

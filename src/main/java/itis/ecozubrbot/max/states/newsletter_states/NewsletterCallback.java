@@ -1,6 +1,6 @@
 package itis.ecozubrbot.max.states.newsletter_states;
 
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstServiceImpl;
+import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationChallengeFirstServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.botapi.client.MaxClient;
@@ -16,7 +16,7 @@ public class NewsletterCallback {
         String type = update.getCallback().getPayload().split(":")[0];
         switch (type) {
             case "newsletterT": {
-                moderationChallengeFirstService.cameAnswer(update);
+                moderationChallengeFirstService.cameAnswer(update, client);
             }
         }
     }

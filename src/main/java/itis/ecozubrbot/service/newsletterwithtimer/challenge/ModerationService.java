@@ -1,16 +1,17 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.service.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
+import itis.ecozubrbot.repositories.jpa.UserEventRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import java.util.Iterator;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.model.NewMessageBody;
 
 public interface ModerationService {
-    // Инициализировать поток модерации.
-    void initializeModeration(
+    // Инициализировать поток модерации челенджа.
+    void initializeChallengeModeration(
             long idNewsLetter,
             long ChatIdSender,
             Iterator<ChatIdAndMessageBody> iterator,
@@ -18,6 +19,17 @@ public interface ModerationService {
             NewMessageBody isRejected,
             MaxClient client,
             UserChallengeRepository userChallengeRepository,
+            UserRepository userRepository);
+
+    // Инициализировать поток модерации События
+    void initializeEventModeration(
+            long idNewsLetter,
+            long ChatIdSender,
+            Iterator<ChatIdAndMessageBody> iterator,
+            NewMessageBody isApproved,
+            NewMessageBody isRejected,
+            MaxClient client,
+            UserEventRepository userEventRepository,
             UserRepository userRepository);
 
     // Прислать ответ от модерации, которая проверила юзера с ChatIdSender.
