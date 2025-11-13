@@ -1,13 +1,12 @@
-package itis.ecozubrbot.max.callbacks.impl.challenge;
+package itis.ecozubrbot.max.callbacks.impl.event;
 
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.models.Challenge;
-import itis.ecozubrbot.services.ChallengeService;
-import java.util.ArrayList;
-import java.util.List;
+import itis.ecozubrbot.models.Event;
+import itis.ecozubrbot.services.EventService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -21,42 +20,46 @@ import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.EditMessageQuery;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @AllArgsConstructor
-public class ChallengesCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.CHALLENGES;
-
-    private ChallengeService challengeService;
+public class EventsCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.EVENTS;
+    private final EventService eventService;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
+        Long userId = update.getCallback().getUser().getUserId();
         int nextIndex = Integer.parseInt(update.getCallback().getPayload().split(":")[1]);
         nextIndex = Math.max(nextIndex, 0);
-        List<Challenge> challenges = challengeService.getChallengesSortedByPoints();
+        List<Event> events = eventService.getEventsForUserSortedByPoints(userId);
+
         List<List<Button>> layout = new ArrayList<>();
         int countOfIncrease = 0;
         int i;
-        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), challenges.size() - nextIndex);
+        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), events.size() - nextIndex);
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
-            Challenge challenge = challenges.get(i);
+            Event event = events.get(i);
             row.add(new CallbackButton(
-                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex,
-                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/"
-                            + challenge.getExperienceReward()));
+                    CallbackName.EVENT_CARD.getCallbackName() + ":" + event.getId() + ":" + nextIndex,
+                    event.getTitle() + " | " + event.getPointsReward() + "/"
+                            + event.getExperienceReward()));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
         arrowRow.add(new CallbackButton(
-                CallbackName.CHALLENGES.getCallbackName() + ":"
+                CallbackName.EVENTS.getCallbackName() + ":"
                         + (i - IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue() - countOfIncrease),
                 StringConstants.BACKWARD_LIST_BUTTON.getValue()));
 
         arrowRow.add(new CallbackButton(CallbackName.EMPTY.getCallbackName(), StringConstants.VOID.getValue()));
 
-        CallbackName forwardCallback = (i == challenges.size()) ?
+        CallbackName forwardCallback = (i == events.size()) ?
                 CallbackName.EMPTY :
-                callbackName.CHALLENGES;
+                callbackName.EVENTS;
 
         arrowRow.add(new CallbackButton(
                 forwardCallback.getCallbackName()+ ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
@@ -65,7 +68,7 @@ public class ChallengesCallback implements Callback {
                 CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));
         layout.add(backButton);
 
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CHALLENGES.getValue())
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.EVENTS.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
                 .build();
         EditMessageQuery query = new EditMessageQuery(

@@ -4,10 +4,10 @@ import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.states.State;
-import itis.ecozubrbot.models.UserChallenge;
+import itis.ecozubrbot.models.UserEvent;
 import itis.ecozubrbot.repositories.StateRepository;
-import itis.ecozubrbot.repositories.UserChallengeOnModerationRepository;
-import itis.ecozubrbot.services.UserChallengeService;
+import itis.ecozubrbot.repositories.UserEventOnModerationRepository;
+import itis.ecozubrbot.services.UserEventService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -25,11 +25,15 @@ import ru.max.botapi.queries.SendMessageQuery;
 
 @Component
 @AllArgsConstructor
-public class WaitingProofOfChallengeState implements State {
-    private final StateName stateName = StateName.WAITING_PROOF_OF_CHALLENGE;
-    private UserChallengeOnModerationRepository userChallengeOnModerationRepository;
-    private UserChallengeService userChallengeService;
-    private StateRepository stateRepository;
+public class WaitingProofOfEventState implements State {
+    private final StateName stateName = StateName.WAITING_PROOF_OF_EVENT;
+    private final UserEventService userEventService;
+    private final UserEventOnModerationRepository userEventOnModerationRepository;
+    private final StateRepository stateRepository;
+
+    @Override
+    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
+    }
 
     @Override
     public void handleMessageCreated(MessageCreatedUpdate update, MaxClient client) {
@@ -57,14 +61,14 @@ public class WaitingProofOfChallengeState implements State {
                             StringConstants.PROOF_CHECK.getValue().formatted(text))
                     .withAttachments(AttachmentsBuilder.photos(photoToken)
                             .with(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.singleRow(new CallbackButton(
-                                    CallbackName.CHALLENGE_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
+                                    CallbackName.EVENT_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
                                     StringConstants.ACCEPT_PROOF_FOR_SENDING.getValue())))))
                     .build();
-            UserChallenge userChallenge =
-                    userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId));
-            userChallenge.setProofDescription(text);
-            userChallenge.setProofImageUrl(photoToken);
-            userChallengeService.save(userChallenge);
+            UserEvent userEvent =
+                    userEventService.getById(userEventOnModerationRepository.getUserEventId(userId));
+            userEvent.setProofDescription(text);
+            userEvent.setProofImageUrl(photoToken);
+            userEventService.save(userEvent);
             stateRepository.put(userId, StateName.DEFAULT);
         }
 
@@ -75,9 +79,6 @@ public class WaitingProofOfChallengeState implements State {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {}
 
     @Override
     public StateName getState() {

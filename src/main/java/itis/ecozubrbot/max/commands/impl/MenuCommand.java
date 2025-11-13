@@ -32,11 +32,11 @@ public class MenuCommand implements Command {
         List<List<Button>> buttonGrid = new ArrayList<>();
         List<Button> buttonRow1 = new ArrayList<>();
         buttonRow1.add(new CallbackButton(CallbackName.PET.getCallbackName(), StringConstants.PET_BUTTON.getValue()));
-        buttonRow1.add(new CallbackButton(CallbackName.SHOP.getCallbackName(), StringConstants.SHOP_BUTTON.getValue()));
+        buttonRow1.add(new CallbackButton(CallbackName.SHOP.getCallbackName()+":0", StringConstants.SHOP_BUTTON.getValue()));
         buttonGrid.add(buttonRow1);
         List<Button> buttonRow2 = new ArrayList<>();
         buttonRow2.add(
-                new CallbackButton(CallbackName.EVENTS.getCallbackName(), StringConstants.EVENTS_BUTTON.getValue()));
+                new CallbackButton(CallbackName.EVENTS.getCallbackName()+":0", StringConstants.EVENTS_BUTTON.getValue()));
         buttonRow2.add(new CallbackButton(
                 CallbackName.CHALLENGES.getCallbackName() + ":0", StringConstants.TASKS_BUTTON.getValue()));
         buttonGrid.add(buttonRow2);
