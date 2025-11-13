@@ -29,7 +29,8 @@ public class ChallengeAcceptProofForSendingCallback implements Callback {
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long userId = update.getCallback().getUser().getUserId();
-        moderationChallengeFirstService.createModeration(userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)));
+        moderationChallengeFirstService.createModeration(
+                userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)));
         userChallengeOnModerationRepository.remove(userId);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.PROOF_GET_SUCCESS.getValue())
                 .build();

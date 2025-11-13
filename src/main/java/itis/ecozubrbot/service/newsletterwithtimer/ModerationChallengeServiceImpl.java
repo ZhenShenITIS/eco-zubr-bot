@@ -9,7 +9,6 @@ import itis.ecozubrbot.repositories.MessageTimerRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.stereotype.Component;
 import ru.max.botapi.model.NewMessageBody;
 

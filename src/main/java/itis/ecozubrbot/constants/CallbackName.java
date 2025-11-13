@@ -22,6 +22,7 @@ public enum CallbackName {
     EVENT_DONE("event_done"),
     CHALLENGE_CARD("challenge_card"),
     CHALLENGE_DONE("challenge_done"),
+    CHANGE_CITY("change_city"),
     EVENT_ACCEPT_FOR_SENDING_PROOF("event_accept_for_sending_proof"),
     CHALLENGE_ACCEPT_FOR_SENDING_PROOF("challenge_accept_for_sending_proof"),
     EDIT_PROOF_OF_CHALLENGE("edit_proof_of_challenge"),
