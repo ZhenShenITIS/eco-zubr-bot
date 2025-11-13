@@ -64,7 +64,6 @@ public enum StringConstants {
             ├─ Выполнено челленджей: %d
             ├─ Посещено событий: %d
             ├─ Решено квизов: %d""");
-    LEADERBOARD_YOUR_PLACE("⭐ %d место: %s (%d XP)");
 
     private final String value;
 }
