@@ -1,13 +1,12 @@
-package itis.ecozubrbot.max.callbacks.impl.challenge;
+package itis.ecozubrbot.max.callbacks.impl.shop;
 
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.Challenge;
-import itis.ecozubrbot.services.ChallengeService;
-import java.util.ArrayList;
-import java.util.List;
+import itis.ecozubrbot.models.Event;
+import itis.ecozubrbot.models.Reward;
+import itis.ecozubrbot.services.RewardService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -20,43 +19,47 @@ import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.EditMessageQuery;
+import ru.max.botapi.queries.SendMessageQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class ChallengesCallback implements Callback {
-    private final CallbackName callbackName = CallbackName.CHALLENGES;
-
-    private ChallengeService challengeService;
+public class ShopCallback implements Callback {
+    private final CallbackName callbackName = CallbackName.SHOP;
+    private final RewardService rewardService;
 
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         int nextIndex = Integer.parseInt(update.getCallback().getPayload().split(":")[1]);
         nextIndex = Math.max(nextIndex, 0);
-        List<Challenge> challenges = challengeService.getChallengesSortedByPoints();
+        List<Reward> rewards = rewardService.getRewardsSortedByPoints();
+
         List<List<Button>> layout = new ArrayList<>();
         int countOfIncrease = 0;
         int i;
-        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), challenges.size() - nextIndex);
+        int bounds = nextIndex + Math.min(IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue(), rewards.size() - nextIndex);
         for (i = nextIndex; i < bounds; i++, countOfIncrease++) {
             List<Button> row = new ArrayList<>();
-            Challenge challenge = challenges.get(i);
+            Reward reward = rewards.get(i);
             row.add(new CallbackButton(
-                    CallbackName.CHALLENGE_CARD.getCallbackName() + ":" + challenge.getId() + ":" + nextIndex,
-                    challenge.getTitle() + " | " + challenge.getPointsReward() + "/"
-                            + challenge.getExperienceReward()));
+                    CallbackName.REWARD_CARD.getCallbackName() + ":" + reward.getId() + ":" + nextIndex,
+                    reward.getTitle() + " | " + reward.getPointsCost() + "/"
+                            + reward.getAvailableQuantity()));
             layout.add(row);
         }
         List<Button> arrowRow = new ArrayList<>();
         arrowRow.add(new CallbackButton(
-                CallbackName.CHALLENGES.getCallbackName() + ":"
+                CallbackName.SHOP.getCallbackName() + ":"
                         + (i - IntegerConstants.COUNT_ELEMENTS_PER_PAGE.getValue() - countOfIncrease),
                 StringConstants.BACKWARD_LIST_BUTTON.getValue()));
 
         arrowRow.add(new CallbackButton(CallbackName.EMPTY.getCallbackName(), StringConstants.VOID.getValue()));
 
-        CallbackName forwardCallback = (i == challenges.size()) ?
+        CallbackName forwardCallback = (i == rewards.size()) ?
                 CallbackName.EMPTY :
-                callbackName.CHALLENGES;
+                callbackName.SHOP;
 
         arrowRow.add(new CallbackButton(
                 forwardCallback.getCallbackName()+ ":" + i, StringConstants.FORWARD_LIST_BUTTON.getValue()));
@@ -65,7 +68,7 @@ public class ChallengesCallback implements Callback {
                 CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));
         layout.add(backButton);
 
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.CHALLENGES.getValue())
+        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.SHOP.getValue())
                 .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(layout)))
                 .build();
         EditMessageQuery query = new EditMessageQuery(

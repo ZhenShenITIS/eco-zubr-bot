@@ -9,6 +9,7 @@ import itis.ecozubrbot.max.states.impl.TestState;
 import java.util.List;
 
 import itis.ecozubrbot.max.states.impl.WaitingProofOfChallengeState;
+import itis.ecozubrbot.max.states.impl.WaitingProofOfEventState;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ public class StateConfig {
     private GeolocationState geolocationState;
     private ImageUploadState imageUploadState;
     private WaitingProofOfChallengeState waitingProofOfChallengeState;
+    private WaitingProofOfEventState waitingProofOfEventState;
     private List<State> stateList;
 
     @Bean
@@ -30,6 +32,7 @@ public class StateConfig {
         stateList.add(geolocationState);
         stateList.add(imageUploadState);
         stateList.add(waitingProofOfChallengeState);
+        stateList.add(waitingProofOfEventState);
         return new StateContainer(stateList);
     }
 }

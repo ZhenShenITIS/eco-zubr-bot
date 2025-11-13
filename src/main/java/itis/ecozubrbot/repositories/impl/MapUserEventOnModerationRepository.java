@@ -20,4 +20,9 @@ public class MapUserEventOnModerationRepository implements UserEventOnModeration
     public Long getUserEventId(Long userId) {
         return map.get(userId);
     }
+
+    @Override
+    public void remove(Long userId) {
+        map.remove(userId);
+    }
 }

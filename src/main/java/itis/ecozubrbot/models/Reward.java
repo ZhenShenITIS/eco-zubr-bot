@@ -1,5 +1,6 @@
 package itis.ecozubrbot.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,9 +23,15 @@ public class Reward {
     private Long id;
 
     private String title;
+    @Column(columnDefinition = "text")
     private String description;
     private Integer pointsCost;
     private String value;
     private Integer availableQuantity;
     private String imageUrl;
+
+    @Override
+    public String toString() {
+        return title + "\n\n" + description + "\n\nCтоимость/наличие:\n" + pointsCost + "/" + availableQuantity;
+    }
 }
