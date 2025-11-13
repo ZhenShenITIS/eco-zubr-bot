@@ -20,3 +20,5 @@ public interface ModerationService {
     // Отправить результаты модерации в этот класс для дальнейшей обработка
     void setResultNewsletterTimer(long idNewsletter, long countApproved, long countRejected);
 }
+
+// idNewsLetter - это id UserChallenge

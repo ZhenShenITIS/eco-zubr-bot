@@ -19,6 +19,9 @@ public enum CallbackName {
     CHALLENGE_DONE("challenge_done"),
     BACK_TO_PET_START("back_to_pet_start"),
     CHANGE_CITY("change_city");
+    ACCEPT_FOR_SENDING_PROOF_OF_CHALLENGE("accept_for_sending_proof_of_challenge"),
+    EDIT_PROOF_OF_CHALLENGE("edit_proof_of_challenge"),
+    BACK_TO_PET_START("back_to_pet_start");
 
     private final String callbackName;
 }

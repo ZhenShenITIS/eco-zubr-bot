@@ -4,13 +4,15 @@ import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.max.callbacks.impl.BackToMenuCallback;
 import itis.ecozubrbot.max.callbacks.impl.BackToPetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.CaressCallback;
-import itis.ecozubrbot.max.callbacks.impl.ChallengeCardCallback;
-import itis.ecozubrbot.max.callbacks.impl.ChallengesCallback;
 import itis.ecozubrbot.max.callbacks.impl.EventsCallback;
 import itis.ecozubrbot.max.callbacks.impl.PetStartCallback;
 import itis.ecozubrbot.max.callbacks.impl.ProfileCallback;
 import itis.ecozubrbot.max.callbacks.impl.ShopCallback;
 import itis.ecozubrbot.max.callbacks.impl.TestCallback;
+import itis.ecozubrbot.max.callbacks.impl.challenge.AcceptProofForSendingCallback;
+import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengeCardCallback;
+import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengeDoneCallback;
+import itis.ecozubrbot.max.callbacks.impl.challenge.ChallengesCallback;
 import itis.ecozubrbot.max.containers.CallbackContainer;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,8 @@ public class CallbackConfig {
     private BackToPetStartCallback backToPetStartCallback;
     private CaressCallback caressCallback;
     private ChallengeCardCallback challengeCardCallback;
+    private AcceptProofForSendingCallback acceptProofForSendingCallback;
+    private ChallengeDoneCallback challengeDoneCallback;
     private List<Callback> callbackList;
 
     @Bean
@@ -44,6 +48,8 @@ public class CallbackConfig {
         callbackList.add(backToPetStartCallback);
         callbackList.add(caressCallback);
         callbackList.add(challengeCardCallback);
+        callbackList.add(acceptProofForSendingCallback);
+        callbackList.add(challengeDoneCallback);
         return new CallbackContainer(callbackList);
     }
 }

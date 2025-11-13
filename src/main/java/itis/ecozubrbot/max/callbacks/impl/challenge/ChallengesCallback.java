@@ -1,4 +1,4 @@
-package itis.ecozubrbot.max.callbacks.impl;
+package itis.ecozubrbot.max.callbacks.impl.challenge;
 
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.IntegerConstants;
