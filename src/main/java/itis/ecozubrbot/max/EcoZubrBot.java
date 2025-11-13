@@ -19,18 +19,21 @@ public class EcoZubrBot extends LongPollingBot {
     private StateContainer stateContainer;
     private StateRepository stateRepository;
     private BotStartedHandler botStartedHandler;
+    private NewsletterCallback newsletterCallback;
 
     public EcoZubrBot(
             String accessToken,
             TestState testState,
             StateContainer stateContainer,
             StateRepository stateRepository,
-            BotStartedHandler botStartedHandler) {
+            BotStartedHandler botStartedHandler,
+            NewsletterCallback newsletterCallback) {
         super(accessToken);
         this.testState = testState;
         this.stateContainer = stateContainer;
         this.stateRepository = stateRepository;
         this.botStartedHandler = botStartedHandler;
+        this.newsletterCallback = newsletterCallback;
     }
 
     @UpdateHandler
@@ -44,7 +47,7 @@ public class EcoZubrBot extends LongPollingBot {
     @UpdateHandler
     public void onMessageCallback(MessageCallbackUpdate update) {
         if (update.getCallback().getPayload().split(":")[0].contains("newsletter")) {
-            Thread.startVirtualThread(() -> NewsletterCallback.handlerCallback(update, getClient()));
+            Thread.startVirtualThread(() -> newsletterCallback.handlerCallback(update, getClient()));
         } else {
             Thread.startVirtualThread(() -> stateContainer
                     .getStateInstance(

@@ -1,27 +1,50 @@
 package itis.ecozubrbot.service.newsletterwithtimer;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
+import itis.ecozubrbot.constants.TaskStatus;
 import itis.ecozubrbot.model.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
+import itis.ecozubrbot.newsletter.NewsletterManager;
+import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
 import java.util.*;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
 import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
+import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.model.*;
 
 @Component
 @AllArgsConstructor
-public class ModerationChallengeFirstServiceImpl implements ModerationChallengeFirstService{
+public class ModerationChallengeFirstServiceImpl implements ModerationChallengeFirstService {
 
     UserRepository userRepository;
     ModerationChallengeServiceImpl moderationChallengeService;
+    UserChallengeRepository userChallengeRepository;
 
-    public void createModeration(UserChallenge userChallenge) {
+    public void createModeration(UserChallenge userChallenge, MaxClient client) {
+
+        List<UserChallenge> list = userChallengeRepository.findAll();
+        for (UserChallenge userChallenge1 : list) {
+            if (userChallenge1.getUser().getId().equals(userChallenge.getUser().getId())) {
+                if (userChallenge1
+                        .getChallenge()
+                        .getId()
+                        .equals(userChallenge.getChallenge().getId())) {
+                    if (userChallenge1.getStatus() == TaskStatus.ACCEPTED) {
+                        NewMessageBody messageBody = new NewMessageBody("ВЫ уже выполнили данный челендж", null, null);
+                        new NewsletterManager(client)
+                                .sendMessage(
+                                        messageBody, userChallenge.getUser().getChatId());
+                        return;
+                    }
+                }
+            }
+        }
+
         long idNewsLetter = userChallenge.getId();
         long chatIdSender = userChallenge.getUser().getChatId();
 
@@ -33,9 +56,9 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
         for (User user : users) {
             NewMessageBody messageBody;
             Button buttonAccept = new CallbackButton(
-                    "newsletter" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
+                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "A", "Одобрить");
             Button buttonReject = new CallbackButton(
-                    "newsletter" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
+                    "newsletterT" + ":" + idNewsLetter + ":" + user.getChatId() + ":" + "R", "Отклонить");
 
             List<Button> buttons = Arrays.asList(buttonAccept, buttonReject);
             messageBody = NewMessageBodyBuilder.ofText("Модерация на следующий челендж: "
@@ -66,7 +89,14 @@ public class ModerationChallengeFirstServiceImpl implements ModerationChallengeF
                 null,
                 null);
         moderationChallengeService.initializeModeration(
-                idNewsLetter, chatIdSender, iterator, approvedMessage, rejectedMessage);
+                idNewsLetter,
+                chatIdSender,
+                iterator,
+                approvedMessage,
+                rejectedMessage,
+                client,
+                userChallengeRepository,
+                userRepository);
     }
 
     public void cameAnswer(MessageCallbackUpdate update) {

@@ -42,6 +42,7 @@ public class ModerationSendingManager {
             long countChatSec,
             long maxTimeWorkSec) {
         // Первоначальная рассылка для модерации первым countMiderators пользователям
+        int finalCountModerators = countModerators;
         while (moderatorsChat.hasNext() && countModerators-- > 0) {
             ChatIdAndMessageBody chatIdAndMessageBody = moderatorsChat.next();
             Long chatId = chatIdAndMessageBody.chat_id();
@@ -51,9 +52,8 @@ public class ModerationSendingManager {
                     new MessageTimer(idNewsletter, chatId, NewsletterTimerStatus.WAITING, LocalDateTime.now()));
         }
 
-        int finalCountModerators = countModerators;
         mainTaskFuture = scheduler.scheduleAtFixedRate(
-                () -> tick(moderatorsChat, idNewsletter, finalCountModerators, countChatSec), 0, 2, TimeUnit.MINUTES);
+                () -> tick(moderatorsChat, idNewsletter, finalCountModerators, countChatSec), 0, 5, TimeUnit.SECONDS);
 
         shutdownFuture = scheduler.schedule(
                 () -> stop(moderatorsChat, idNewsletter, finalCountModerators, countChatSec),
@@ -65,15 +65,20 @@ public class ModerationSendingManager {
     private void tick(
             Iterator<ChatIdAndMessageBody> moderatorsChat, long idNewsletter, int countModerators, long countChatSec) {
         // Считаем количество просрочивших время
-        int countNewInactive = changeStatusInactive(idNewsletter, countModerators);
+        int countNewInactive = changeStatusInactive(idNewsletter, countChatSec);
+        System.out.println("tick");
 
         // Если набрано нужное количетво голосов или больш некого опрашивать
-        if (checkIsComplete(idNewsletter, countNewInactive) || !moderatorsChat.hasNext()) {
+        if (checkIsComplete(idNewsletter, countModerators)) {
             stop(moderatorsChat, idNewsletter, countNewInactive, countChatSec);
             return;
         }
 
         // Отправляем рассылку countNewInactive людям
+        if (countNewInactive > 0 && !moderatorsChat.hasNext()) {
+            stop(moderatorsChat, idNewsletter, countNewInactive, countChatSec);
+        }
+
         while (moderatorsChat.hasNext() && countNewInactive-- > 0) {
             ChatIdAndMessageBody chatIdAndMessageBody = moderatorsChat.next();
             Long chatId = chatIdAndMessageBody.chat_id();

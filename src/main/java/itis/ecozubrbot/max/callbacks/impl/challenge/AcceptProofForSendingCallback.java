@@ -3,7 +3,6 @@ package itis.ecozubrbot.max.callbacks.impl.challenge;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
-import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.repositories.UserChallengeOnModerationRepository;
 import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
 import itis.ecozubrbot.services.UserChallengeService;
@@ -27,7 +26,9 @@ public class AcceptProofForSendingCallback implements Callback {
     @Override
     public void handleMessageCallback(MessageCallbackUpdate update, MaxClient client) {
         Long userId = update.getCallback().getUser().getUserId();
-        moderationChallengeFirstService.createModeration(userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)));
+        moderationChallengeFirstService.createModeration(
+                userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)), client);
+
         userChallengeOnModerationRepository.remove(userId);
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.PROOF_GET_SUCCESS.getValue())
                 .build();
