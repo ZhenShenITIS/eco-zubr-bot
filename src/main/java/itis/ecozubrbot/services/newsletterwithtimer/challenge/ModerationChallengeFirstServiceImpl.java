@@ -1,14 +1,14 @@
-package itis.ecozubrbot.service.newsletterwithtimer.challenge;
+package itis.ecozubrbot.services.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
-import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.dto.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserChallenge;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationChallengeFirstService;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

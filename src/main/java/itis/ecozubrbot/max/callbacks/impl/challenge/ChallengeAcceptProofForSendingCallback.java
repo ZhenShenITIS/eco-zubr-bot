@@ -6,7 +6,7 @@ import itis.ecozubrbot.constants.StringConstants;
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.repositories.UserChallengeOnModerationRepository;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationChallengeFirstService;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationChallengeFirstService;
 import itis.ecozubrbot.services.UserChallengeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

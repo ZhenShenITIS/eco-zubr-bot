@@ -1,8 +1,8 @@
-package itis.ecozubrbot.service.newsletterwithtimer.event;
+package itis.ecozubrbot.services.newsletterwithtimer.event;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
-import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.dto.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.Pet;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserEvent;
@@ -10,8 +10,8 @@ import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
 import itis.ecozubrbot.repositories.impl.MapMessageTimerRepository;
 import itis.ecozubrbot.repositories.jpa.*;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
-import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationSendingManager;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationService;
+import itis.ecozubrbot.services.newsletterwithtimer.challenge.ModerationSendingManager;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;

@@ -55,7 +55,7 @@ public class WaitingProofOfChallengeState implements State {
 
             List<Button> buttonRow1 = new ArrayList<>();
             buttonRow1.add(new CallbackButton(
-                    CallbackName.EVENT_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
+                    CallbackName.CHALLENGE_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
                     StringConstants.ACCEPT_PROOF_FOR_SENDING.getValue()));
 
             List<Button> buttonRow2 = new ArrayList<>();

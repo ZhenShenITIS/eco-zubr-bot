@@ -1,6 +1,6 @@
 package itis.ecozubrbot.repositories.impl;
 
-import itis.ecozubrbot.model.MessageTimer;
+import itis.ecozubrbot.dto.MessageTimer;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
 import java.util.ArrayList;
 import java.util.List;

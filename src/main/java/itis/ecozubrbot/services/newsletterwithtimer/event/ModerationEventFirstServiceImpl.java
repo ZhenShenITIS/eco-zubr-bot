@@ -1,15 +1,15 @@
-package itis.ecozubrbot.service.newsletterwithtimer.event;
+package itis.ecozubrbot.services.newsletterwithtimer.event;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.TaskStatus;
-import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.dto.ChatIdAndMessageBody;
 import itis.ecozubrbot.models.User;
 import itis.ecozubrbot.models.UserEvent;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserEventRepository;
 import itis.ecozubrbot.repositories.jpa.UserRepository;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationEventFirstService;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationEventFirstService;
 import java.util.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
