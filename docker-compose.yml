@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+    # ===== БАЗА ДАННЫХ POSTGRESQL =====
+    postgres:
+        image: postgres:11-alpine
+        container_name: eco-zubr-postgres
+
+        # Переменные окружения для PostgreSQL
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+
+        # Том для сохранения данных БД между перезагрузками
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
+
+        # Проверка здоровья контейнера
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+        networks:
+            - app-network
+
+    # ===== SPRING BOOT ПРИЛОЖЕНИЕ =====
+    app:
+        build: .
+        container_name: eco-zubr-app
+
+        # Переменные окружения приложения
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+            SPRING_DATASOURCE_USERNAME: ${DB_USER}
+            SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+            SPRING_JPA_HIBERNATE_DDL_AUTO: update
+            MAX_TOKEN: ${MAX_TOKEN}
+            YANDEX_GEOCODER_TOKEN: ${YANDEX_GEOCODER_TOKEN}
+
+
+        # Приложение зависит от БД
+        depends_on:
+            postgres:
+                condition: service_healthy
+
+        networks:
+            - app-network
+
+# ===== ТОМ ДЛЯ СОХРАНЕНИЯ ДАННЫХ БД =====
+volumes:
+    postgres_data:
+
+# ===== СЕТЬ ДЛЯ СВЯЗИ КОНТЕЙНЕРОВ =====
+networks:
+    app-network:
+        driver: bridge
