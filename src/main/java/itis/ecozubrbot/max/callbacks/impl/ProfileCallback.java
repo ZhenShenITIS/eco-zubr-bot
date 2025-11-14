@@ -13,10 +13,14 @@ import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
+import ru.max.botapi.model.Button;
 import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -31,10 +35,23 @@ public class ProfileCallback implements Callback {
         String userProfileString =
                 profileService.getProfileForUser(update.getCallback().getUser().getUserId());
 
+        List<List<Button>> buttonGrid = new ArrayList<>();
+
+        List<Button> buttonRow1 = new ArrayList<>();
+        buttonRow1.add(new CallbackButton(
+                CallbackName.CHANGE_CITY.getCallbackName(),
+                StringConstants.CHANGE_CITY_BUTTON.getValue()));
+
+        List<Button> buttonRow2 = new ArrayList<>();
+        buttonRow2.add(new CallbackButton(
+                CallbackName.BACK_TO_MENU.getCallbackName(),
+                StringConstants.BACK_TO_MENU_BUTTON.getValue()));
+
+        buttonGrid.add(buttonRow1);
+        buttonGrid.add(buttonRow2);
+
         NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(userProfileString)
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.single(new CallbackButton(
-                                CallbackName.CHANGE_CITY.getCallbackName(),
-                                StringConstants.CHANGE_CITY_BUTTON.getValue())))
+                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(buttonGrid))
                         .with(AttachmentsBuilder.photos(basicFileMap.getToken(BasicFile.PROFILE))))
                 .build();
 
