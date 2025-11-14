@@ -1,12 +1,12 @@
-package itis.ecozubrbot.service.newsletterwithtimer.challenge;
+package itis.ecozubrbot.services.newsletterwithtimer.challenge;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.NewsletterTimerStatus;
-import itis.ecozubrbot.model.ChatIdAndMessageBody;
-import itis.ecozubrbot.model.MessageTimer;
+import itis.ecozubrbot.dto.ChatIdAndMessageBody;
+import itis.ecozubrbot.dto.MessageTimer;
 import itis.ecozubrbot.newsletter.NewsletterManager;
 import itis.ecozubrbot.repositories.MessageTimerRepository;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationService;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;

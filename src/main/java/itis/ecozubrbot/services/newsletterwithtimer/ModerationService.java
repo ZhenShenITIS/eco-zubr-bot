@@ -1,7 +1,7 @@
-package itis.ecozubrbot.service.newsletterwithtimer;
+package itis.ecozubrbot.services.newsletterwithtimer;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
-import itis.ecozubrbot.model.ChatIdAndMessageBody;
+import itis.ecozubrbot.dto.ChatIdAndMessageBody;
 import itis.ecozubrbot.repositories.jpa.PetRepository;
 import itis.ecozubrbot.repositories.jpa.UserChallengeRepository;
 import itis.ecozubrbot.repositories.jpa.UserEventRepository;

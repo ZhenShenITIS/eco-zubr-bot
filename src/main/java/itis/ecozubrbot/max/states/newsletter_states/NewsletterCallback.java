@@ -2,8 +2,8 @@ package itis.ecozubrbot.max.states.newsletter_states;
 
 import itis.ecozubrbot.quiz.QuizGetAnswerService;
 import itis.ecozubrbot.quiz.QuizService;
-import itis.ecozubrbot.service.newsletterwithtimer.ModerationEventFirstService;
-import itis.ecozubrbot.service.newsletterwithtimer.challenge.ModerationChallengeFirstServiceImpl;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationEventFirstService;
+import itis.ecozubrbot.services.newsletterwithtimer.challenge.ModerationChallengeFirstServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.botapi.client.MaxClient;

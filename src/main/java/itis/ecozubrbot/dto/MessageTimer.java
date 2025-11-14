@@ -1,4 +1,4 @@
-package itis.ecozubrbot.model;
+package itis.ecozubrbot.dto;
 
 import itis.ecozubrbot.constants.NewsLetterTimerAnswer;
 import itis.ecozubrbot.constants.NewsletterTimerStatus;

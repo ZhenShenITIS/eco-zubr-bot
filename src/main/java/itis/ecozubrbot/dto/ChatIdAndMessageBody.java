@@ -1,4 +1,4 @@
-package itis.ecozubrbot.model;
+package itis.ecozubrbot.dto;
 
 import ru.max.botapi.model.NewMessageBody;
 
