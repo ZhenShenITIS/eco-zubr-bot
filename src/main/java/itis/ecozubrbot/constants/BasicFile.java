@@ -17,6 +17,7 @@ public enum BasicFile {
     EVENTS("static/events.png"),
     LEADERBOARD("static/leaderboard.png"),
     PROFILE("static/profile.png"),
+    DEFAULT("static/default_image.png"),
     SHOP("static/shop.png");
 
     private final String filePath;
