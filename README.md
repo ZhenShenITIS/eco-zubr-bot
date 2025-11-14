@@ -27,6 +27,13 @@ cp .env.example .env
 - DB_HOST=postgres (хост бд)
 - DB_PORT=5432 (порт бд)
 
+### Как получить токен YANDEX_GEOCODER_TOKEN:
+1) перейти по ссылке: https://developer.tech.yandex.ru/
+2) Нажать подключить api и выбрать Javascript Api и HTTP Геокодер
+3) Заполнить форму и нажать Отправить
+4) Скопировать предоставленный api токен и добавить в файл .env
+
+
 ### 3. Собрать и запустить контейнеры
 
 docker-compose up -d --build
