@@ -8,6 +8,8 @@ import itis.ecozubrbot.models.UserEvent;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.repositories.UserEventOnModerationRepository;
 import itis.ecozubrbot.services.UserEventService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.max.bot.builders.NewMessageBodyBuilder;
@@ -17,9 +19,6 @@ import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
 import ru.max.botapi.model.*;
 import ru.max.botapi.queries.SendMessageQuery;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -63,8 +62,7 @@ public class WaitingProofOfEventState implements State {
 
             List<Button> buttonRow2 = new ArrayList<>();
             buttonRow2.add(new CallbackButton(
-                    CallbackName.BACK_TO_MENU.getCallbackName(),
-                    StringConstants.BACK_TO_MENU_BUTTON.getValue()));
+                    CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue()));
 
             buttonGrid.add(buttonRow1);
             buttonGrid.add(buttonRow2);

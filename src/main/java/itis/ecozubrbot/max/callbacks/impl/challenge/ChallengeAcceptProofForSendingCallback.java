@@ -3,16 +3,18 @@ package itis.ecozubrbot.max.callbacks.impl.challenge;
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StateName;
 import itis.ecozubrbot.constants.StringConstants;
+import itis.ecozubrbot.helpers.MessageHelper;
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.repositories.StateRepository;
 import itis.ecozubrbot.repositories.UserChallengeOnModerationRepository;
-import itis.ecozubrbot.services.newsletterwithtimer.ModerationChallengeFirstService;
 import itis.ecozubrbot.services.UserChallengeService;
+import itis.ecozubrbot.services.newsletterwithtimer.ModerationChallengeFirstService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.max.bot.builders.NewMessageBodyBuilder;
+import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
+import ru.max.botapi.model.CallbackButton;
 import ru.max.botapi.model.MessageCallbackUpdate;
 import ru.max.botapi.model.NewMessageBody;
 import ru.max.botapi.queries.SendMessageQuery;
@@ -33,8 +35,11 @@ public class ChallengeAcceptProofForSendingCallback implements Callback {
                 userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId)), client);
 
         userChallengeOnModerationRepository.remove(userId);
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(StringConstants.PROOF_GET_SUCCESS.getValue())
-                .build();
+        NewMessageBody replyMessage = MessageHelper.getNewMessageBody(
+                StringConstants.PROOF_GET_SUCCESS.getValue(),
+                InlineKeyboardBuilder.single(new CallbackButton(
+                        CallbackName.BACK_TO_MENU.getCallbackName(), StringConstants.BACK_TO_MENU_BUTTON.getValue())),
+                null);
         Long chatId = update.getMessage().getRecipient().getChatId();
         SendMessageQuery query = new SendMessageQuery(client, replyMessage).chatId(chatId);
         try {
