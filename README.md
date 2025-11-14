@@ -7,7 +7,7 @@ Telegram бот на MAX Long Poll API с Java Spring Boot и PostgreSQL.
 ### 1. Клонируйте репозиторий
 
 \`\`\`bash
-git clone https://github.com/yourusername/eco-zubr-bot.git
+git clone https://github.com/ZhenShenITIS/eco-zubr-bot.git
 cd eco-zubr-bot
 \`\`\`
 
