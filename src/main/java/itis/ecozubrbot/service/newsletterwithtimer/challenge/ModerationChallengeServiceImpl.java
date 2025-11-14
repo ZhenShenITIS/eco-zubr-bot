@@ -31,7 +31,7 @@ public class ModerationChallengeServiceImpl implements ModerationService {
     UserRepository userRepository;
 
     // TODO: ИЗМЕНИТ НА 2
-    private final int COUNT_MODERATORS = 1;
+    private final int COUNT_MODERATORS = 3;
     private final int COUNT_CHAT_SEC = 60 * 60;
     private final int COUNT_MAX_TIME_WORK_SEC = 24 * 60 * 60;
 

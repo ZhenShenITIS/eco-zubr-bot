@@ -2,13 +2,12 @@ package itis.ecozubrbot.max.callbacks.impl.shop;
 
 import itis.ecozubrbot.constants.CallbackName;
 import itis.ecozubrbot.constants.StringConstants;
+import itis.ecozubrbot.helpers.MessageHelper;
 import itis.ecozubrbot.max.callbacks.Callback;
 import itis.ecozubrbot.models.Reward;
 import itis.ecozubrbot.services.RewardService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.max.bot.builders.NewMessageBodyBuilder;
-import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
@@ -28,16 +27,16 @@ public class RewardCardCallback implements Callback {
         Long rewardId = Long.parseLong(update.getCallback().getPayload().split(":")[1]);
         int nextIndex = Integer.parseInt(update.getCallback().getPayload().split(":")[2]);
         Reward reward = rewardService.getById(rewardId);
-        NewMessageBody replyMessage = NewMessageBodyBuilder.ofText(reward.toString())
-                .withAttachments(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.singleColumn(
-                                new CallbackButton(
-                                        CallbackName.REWARD_PURCHASE.getCallbackName() + ":" + rewardId,
-                                        StringConstants.REWARD_PURCHASE_BUTTON.getValue()),
-                                new CallbackButton(
-                                        CallbackName.SHOP.getCallbackName() + ":" + nextIndex,
-                                        StringConstants.BACK_BUTTON.getValue())))
-                        .with(AttachmentsBuilder.photos(reward.getImageUrl())))
-                .build();
+        NewMessageBody replyMessage = MessageHelper.getNewMessageBody(
+                reward.toString(),
+                InlineKeyboardBuilder.singleColumn(
+                        new CallbackButton(
+                                CallbackName.REWARD_PURCHASE.getCallbackName() + ":" + rewardId,
+                                StringConstants.REWARD_PURCHASE_BUTTON.getValue()),
+                        new CallbackButton(
+                                CallbackName.SHOP.getCallbackName() + ":" + nextIndex,
+                                StringConstants.BACK_BUTTON.getValue())),
+                reward.getImageUrl());
         EditMessageQuery query = new EditMessageQuery(
                 client, replyMessage, update.getMessage().getBody().getMid());
         try {

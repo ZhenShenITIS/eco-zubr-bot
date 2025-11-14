@@ -1,0 +1,48 @@
+# Requirements for Eco Zubr Bot
+# Java Project - Maven based
+# for dependencies in java you can use pom.xml
+
+## Core Framework
+Spring Boot 3.5.7
+  - spring-boot-starter-parent:3.5.7
+  - spring-boot-starter-data-jpa
+  - spring-boot-starter-web
+  - spring-boot-starter-test (testing)
+
+## Database
+PostgreSQL Driver 42.7.x (runtime)
+  - org.postgresql:postgresql
+
+## Code Generation & Utilities
+Lombok (code generator)
+  - org.projectlombok:lombok
+
+Google Guava 33.3.1 (utilities)
+  - com.google.guava:guava
+
+JSON Parser
+  - org.json:json:20231013
+
+## MAX API SDK. Docker download this dependency from https://github.com/Moriec/max-bot-sdk-java.git
+MAX Bot SDK 0.0.6-SNAPSHOT
+  - ru.max:max-bot-sdk
+
+## Build Tools (Maven)
+Maven Compiler Plugin
+  - org.apache.maven.plugins:maven-compiler-plugin
+
+Spring Boot Maven Plugin
+  - org.springframework.boot:spring-boot-maven-plugin
+
+Spotless Maven Plugin 2.46.1 (code formatting)
+  - com.diffplug.spotless:spotless-maven-plugin
+
+Palantir Java Format 2.73.0 (code style)
+
+## Java Version
+Java 21 JDK (compile)
+Java 21 JRE (runtime)
+
+## Environment
+Spring Boot Parent: 3.5.7
+Maven: 3.8.x

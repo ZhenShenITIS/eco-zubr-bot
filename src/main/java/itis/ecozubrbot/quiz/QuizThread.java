@@ -22,7 +22,7 @@ public class QuizThread extends Thread {
     @Override
     public void run() {
         try {
-            sleep(10000);
+            sleep(150000);
             while (true) {
                 quizService.initializeQuizNewsLetter(client);
                 sleep(1000 * 60 * 60 * 24);
