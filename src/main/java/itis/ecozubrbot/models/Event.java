@@ -40,6 +40,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return StringConstants.TASK_DETAILS_TEMPLATE.getValue().formatted(title, description, pointsReward, experienceReward);
+        return StringConstants.TASK_DETAILS_TEMPLATE
+                .getValue()
+                .formatted(title, description, pointsReward, experienceReward);
     }
 }
