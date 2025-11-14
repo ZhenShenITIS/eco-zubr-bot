@@ -1,5 +1,6 @@
 package itis.ecozubrbot.models;
 
+import itis.ecozubrbot.constants.StringConstants;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,6 @@ public class Challenge {
 
     @Override
     public String toString() {
-        return title + "\n\n" + description + "\n\nНаграда в очках и опыте:\n" + pointsReward + "/" + experienceReward;
+        return StringConstants.TASK_DETAILS_TEMPLATE.getValue().formatted(title, description, pointsReward, experienceReward);
     }
 }

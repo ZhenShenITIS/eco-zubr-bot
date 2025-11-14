@@ -15,13 +15,11 @@ import ru.max.bot.builders.attachments.AttachmentsBuilder;
 import ru.max.bot.builders.attachments.InlineKeyboardBuilder;
 import ru.max.botapi.client.MaxClient;
 import ru.max.botapi.exceptions.ClientException;
-import ru.max.botapi.model.Attachment;
-import ru.max.botapi.model.CallbackButton;
-import ru.max.botapi.model.MessageCallbackUpdate;
-import ru.max.botapi.model.MessageCreatedUpdate;
-import ru.max.botapi.model.NewMessageBody;
-import ru.max.botapi.model.PhotoAttachment;
+import ru.max.botapi.model.*;
 import ru.max.botapi.queries.SendMessageQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -53,12 +51,25 @@ public class WaitingProofOfChallengeState implements State {
             replyMessage = NewMessageBodyBuilder.ofText(StringConstants.SEND_PHOTO_AND_TEXT.getValue())
                     .build();
         } else {
+            List<List<Button>> buttonGrid = new ArrayList<>();
+
+            List<Button> buttonRow1 = new ArrayList<>();
+            buttonRow1.add(new CallbackButton(
+                    CallbackName.EVENT_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
+                    StringConstants.ACCEPT_PROOF_FOR_SENDING.getValue()));
+
+            List<Button> buttonRow2 = new ArrayList<>();
+            buttonRow2.add(new CallbackButton(
+                    CallbackName.BACK_TO_MENU.getCallbackName(),
+                    StringConstants.BACK_TO_MENU_BUTTON.getValue()));
+
+            buttonGrid.add(buttonRow1);
+            buttonGrid.add(buttonRow2);
+
             replyMessage = NewMessageBodyBuilder.ofText(
                             StringConstants.PROOF_CHECK.getValue().formatted(text))
                     .withAttachments(AttachmentsBuilder.photos(photoToken)
-                            .with(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.singleRow(new CallbackButton(
-                                    CallbackName.CHALLENGE_ACCEPT_FOR_SENDING_PROOF.getCallbackName(),
-                                    StringConstants.ACCEPT_PROOF_FOR_SENDING.getValue())))))
+                            .with(AttachmentsBuilder.inlineKeyboard(InlineKeyboardBuilder.layout(buttonGrid))))
                     .build();
             UserChallenge userChallenge =
                     userChallengeService.getById(userChallengeOnModerationRepository.getUserChallengeId(userId));
