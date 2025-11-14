@@ -45,13 +45,12 @@ public class ShopCallback implements Callback {
             List<Button> row = new ArrayList<>();
             Reward reward = rewards.get(i);
 
-            String text = reward.getTitle() + " | " + reward.getPointsCost() + "/" + reward.getAvailableQuantity();
+            String text = reward.getTitle() + " | " + reward.getPointsCost();
             int maxLen = IntegerConstants.MAX_LENGTH_TEXT_OF_LIST_BUTTON.getValue();
             if (text.length() > maxLen) {
                 int indexFin = reward.getTitle().length() - 4 - (text.length() - maxLen);
                 indexFin = Math.max(indexFin, 0);
-                text = reward.getTitle().substring(0, indexFin) + "... | " + reward.getPointsCost() + "/"
-                        + reward.getAvailableQuantity();
+                text = reward.getTitle().substring(0, indexFin) + "... | " + reward.getPointsCost();
             }
 
             row.add(new CallbackButton(
